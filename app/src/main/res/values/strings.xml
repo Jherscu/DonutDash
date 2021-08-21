@@ -6,4 +6,18 @@
     <string name="orders">Orders:</string>
     <string name="new_order">New Order</string>
     <string name="cancel_existing_order">Cancel Existing Order</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="next">Next</string>
+    <string name="apple_fritter">Apple Fritter</string>
+    <string name="powdered">Powdered</string>
+    <string name="boston_creme">Boston Creme</string>
+    <string name="lingonberry_jam">Lingonberry Jam</string>
+    <string name="churro">Churro</string>
+    <string name="taro">Taro</string>
+    <string name="caramel">Caramel</string>
+    <string name="vanilla">Vanilla</string>
+    <string name="berry">Berry</string>
+    <string name="chocolate">Chocolate</string>
+    <string name="flavor_options">Flavor Options</string>
+    <string name="choose_toppings">Choose Your Toppings</string>
 </resources>

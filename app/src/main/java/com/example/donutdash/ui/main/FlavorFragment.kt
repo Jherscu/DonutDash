@@ -1,12 +1,11 @@
 package com.example.donutdash.ui.main
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.donutdash.R
 import com.example.donutdash.databinding.FragmentFlavorBinding
 import com.example.donutdash.model.SharedViewModel
 

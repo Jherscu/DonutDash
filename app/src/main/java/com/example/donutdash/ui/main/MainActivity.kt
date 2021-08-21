@@ -1,7 +1,7 @@
 package com.example.donutdash.ui.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -43,6 +43,6 @@ class MainActivity : AppCompatActivity() {
      * Handle navigation when Up is selected from the action bar.
      */
     override fun onSupportNavigateUp(): Boolean {
-        return  navController.navigateUp() || super.onSupportNavigateUp()
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }

@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="orderSummaryFragment"
             type="com.example.donutdash.ui.main.OrderSummaryFragment" />
+
         <variable
             name="viewModel"
             type="com.example.donutdash.model.SharedViewModel" />

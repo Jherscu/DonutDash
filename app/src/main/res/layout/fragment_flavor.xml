@@ -1,26 +1,305 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="flavorFragment"
             type="com.example.donutdash.ui.main.FlavorFragment" />
+
         <variable
             name="viewModel"
             type="com.example.donutdash.model.SharedViewModel" />
     </data>
 
-    <FrameLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context=".ui.main.FlavorFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_height="wrap_content">
 
-    </FrameLayout>
+            <TextView
+                android:id="@+id/flavor_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/flavor_options"
+                app:layout_constraintBottom_toTopOf="@id/flavor_wrapper"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/flavor_wrapper"
+                android:layout_width="360dp"
+                android:layout_height="450dp"
+                app:layout_constraintBottom_toTopOf="@id/subtotal_display"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/flavor_textview">
+
+                <LinearLayout
+                    android:id="@+id/chocolate_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toTopOf="@id/berry_box"
+                    app:layout_constraintEnd_toStartOf="@id/churro_box"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/text_chocolate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chocolate" />
+
+                    <NumberPicker
+                        android:id="@+id/number_chocolate"
+                        android:layout_width="52dp"
+                        android:layout_height="36dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/berry_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toTopOf="@id/vanilla_box"
+                    app:layout_constraintEnd_toStartOf="@id/lingonberry_jam_box"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/chocolate_box">
+
+                    <TextView
+                        android:id="@+id/text_berry"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/berry" />
+
+                    <NumberPicker
+                        android:id="@+id/number_berry"
+                        android:layout_width="52dp"
+                        android:layout_height="36dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/vanilla_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toTopOf="@id/caramel_box"
+                    app:layout_constraintEnd_toStartOf="@id/boston_creme_box"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/berry_box">
+
+                    <TextView
+                        android:id="@+id/text_vanilla"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vanilla" />
+
+                    <NumberPicker
+                        android:id="@+id/number_vanilla"
+                        android:layout_width="52dp"
+                        android:layout_height="36dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/caramel_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toTopOf="@id/taro_box"
+                    app:layout_constraintEnd_toStartOf="@id/powdered_box"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/vanilla_box">
+
+                    <TextView
+                        android:id="@+id/text_caramel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/caramel" />
+
+                    <NumberPicker
+                        android:id="@+id/number_caramel"
+                        android:layout_width="52dp"
+                        android:layout_height="36dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/taro_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/apple_fritter_box"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/caramel_box">
+
+                    <TextView
+                        android:id="@+id/text_taro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/taro" />
+
+                    <NumberPicker
+                        android:id="@+id/number_taro"
+                        android:layout_width="52dp"
+                        android:layout_height="36dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/churro_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/chocolate_box"
+                    app:layout_constraintTop_toTopOf="@id/chocolate_box">
+
+                    <TextView
+                        android:id="@+id/text_churro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/churro" />
+
+                    <NumberPicker
+                        android:id="@+id/number_churro"
+                        android:layout_width="52dp"
+                        android:layout_height="36dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lingonberry_jam_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/berry_box"
+                    app:layout_constraintTop_toTopOf="@id/berry_box">
+
+                    <TextView
+                        android:id="@+id/text_lingonberry_jam"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lingonberry_jam" />
+
+                    <NumberPicker
+                        android:id="@+id/number_lingonberry_jam"
+                        android:layout_width="52dp"
+                        android:layout_height="36dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/boston_creme_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/vanilla_box"
+                    app:layout_constraintTop_toTopOf="@id/vanilla_box">
+
+                    <TextView
+                        android:id="@+id/text_boston_creme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/boston_creme" />
+
+                    <NumberPicker
+                        android:id="@+id/number_boston_creme"
+                        android:layout_width="52dp"
+                        android:layout_height="36dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/powdered_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/caramel_box"
+                    app:layout_constraintTop_toTopOf="@id/caramel_box">
+
+                    <TextView
+                        android:id="@+id/text_powdered"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powdered" />
+
+                    <NumberPicker
+                        android:id="@+id/number_powdered"
+                        android:layout_width="52dp"
+                        android:layout_height="36dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/apple_fritter_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/taro_box"
+                    app:layout_constraintTop_toTopOf="@id/taro_box">
+
+                    <TextView
+                        android:id="@+id/text_apple_fritter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/apple_fritter" />
+
+                    <NumberPicker
+                        android:id="@+id/number_apple_fritter"
+                        android:layout_width="52dp"
+                        android:layout_height="36dp" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/subtotal_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{}"
+                app:layout_constraintBottom_toTopOf="@id/cancel_order_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/flavor_wrapper"
+                tools:text="Price: $32.59" />
+
+            <Button
+                android:id="@+id/cancel_order_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="70dp"
+                android:onClick="@{() -> }"
+                android:text="@string/cancel_order"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/next_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/subtotal_display" />
+
+            <Button
+                android:id="@+id/next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="70dp"
+                android:onClick="@{() -> }"
+                android:text="@string/next"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cancel_order_button"
+                app:layout_constraintTop_toBottomOf="@id/subtotal_display" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
 </layout>
