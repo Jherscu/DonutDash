@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/landingFragment">
+
+    <fragment
+        android:id="@+id/landingFragment"
+        android:name="com.example.donutdash.ui.main.LandingFragment"
+        android:label="fragment_landing"
+        tools:layout="@layout/fragment_landing" >
+        <action
+            android:id="@+id/action_landingFragment_to_newOrderFragment"
+            app:destination="@id/newOrderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newOrderFragment"
+        android:name="com.example.donutdash.ui.main.NewOrderFragment"
+        android:label="fragment_new_order"
+        tools:layout="@layout/fragment_new_order" >
+        <action
+            android:id="@+id/action_newOrderFragment_to_flavorFragment"
+            app:destination="@id/flavorFragment" />
+        <action
+            android:id="@+id/action_newOrderFragment_to_landingFragment"
+            app:destination="@id/landingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/flavorFragment"
+        android:name="com.example.donutdash.ui.main.FlavorFragment"
+        android:label="fragment_flavor"
+        tools:layout="@layout/fragment_flavor" >
+        <action
+            android:id="@+id/action_flavorFragment_to_toppingsFragment"
+            app:destination="@id/toppingsFragment" />
+        <action
+            android:id="@+id/action_flavorFragment_to_landingFragment"
+            app:destination="@id/landingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/toppingsFragment"
+        android:name="com.example.donutdash.ui.main.ToppingsFragment"
+        android:label="fragment_toppings"
+        tools:layout="@layout/fragment_toppings" >
+        <action
+            android:id="@+id/action_toppingsFragment_to_orderSummaryFragment"
+            app:destination="@id/orderSummaryFragment" />
+        <action
+            android:id="@+id/action_toppingsFragment_to_landingFragment"
+            app:destination="@id/landingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderSummaryFragment"
+        android:name="com.example.donutdash.ui.main.OrderSummaryFragment"
+        android:label="fragment_order_summary"
+        tools:layout="@layout/fragment_order_summary" >
+        <action
+            android:id="@+id/action_orderSummaryFragment_to_landingFragment"
+            app:destination="@id/landingFragment" />
+    </fragment>
+</navigation>
