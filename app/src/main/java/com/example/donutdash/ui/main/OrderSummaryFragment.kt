@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.donutdash.R
 import com.example.donutdash.databinding.FragmentOrderSummaryBinding
 import com.example.donutdash.model.SharedViewModel
@@ -44,6 +45,23 @@ class OrderSummaryFragment : Fragment() {
         }
     }
 
+    fun submitOrder() {
+        TODO("Create INTENT and save order as order object for use in LandingFragment recyclerview")
+        TODO("After submission change cancel order text to return to homepage")
+    }
+
+    /**
+     * Resets order and returns to LandingFragment.
+     */
+    fun cancelOrder() {
+        sharedViewModel.resetOrder()
+        findNavController().navigate(R.id.action_orderSummaryFragment_to_landingFragment)
+    }
+
+    /**
+     * This method is called when the fragment is destroyed. The added implementation
+     * resets the binding object.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null

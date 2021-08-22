@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import com.example.donutdash.R
 import com.example.donutdash.databinding.FragmentFlavorBinding
 import com.example.donutdash.model.SharedViewModel
 
@@ -43,6 +45,25 @@ class FlavorFragment : Fragment() {
         }
     }
 
+    /**
+     * Takes user to next stage of donut order.
+     */
+    fun nextScreen() {
+        findNavController().navigate(R.id.action_flavorFragment_to_toppingsFragment)
+    }
+
+    /**
+     * Resets order and returns to LandingFragment.
+     */
+    fun cancelOrder() {
+        sharedViewModel.resetOrder()
+        findNavController().navigate(R.id.action_flavorFragment_to_landingFragment)
+    }
+
+    /**
+     * This method is called when the fragment is destroyed. The added implementation
+     * resets the binding object.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null

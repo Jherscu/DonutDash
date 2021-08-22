@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
 import com.example.donutdash.R
 import com.example.donutdash.databinding.FragmentLandingBinding
 import com.example.donutdash.model.SharedViewModel
@@ -46,6 +47,32 @@ class LandingFragment : Fragment() {
         }
     }
 
+    fun loadOrders() {
+        TODO("take completed order/orders and load into recyclerview")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (/* list of saved, completed orders exists */) {
+            loadOrders()
+        }
+    }
+
+    fun startNewOrder() {
+        findNavController().navigate(R.id.action_landingFragment_to_newOrderFragment)
+    }
+
+    fun cancelExistingOrder() {
+        TODO("Removes existing order from recyclerview and sends dialog or" +
+                " snackbar or dropdown that order is canceled with vendor")
+    }
+
+
+
+    /**
+     * This method is called when the fragment is destroyed. The added implementation
+     * resets the binding object.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null

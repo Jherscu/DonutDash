@@ -24,7 +24,9 @@
             app:destination="@id/flavorFragment" />
         <action
             android:id="@+id/action_newOrderFragment_to_landingFragment"
-            app:destination="@id/landingFragment" />
+            app:destination="@id/landingFragment"
+            app:popUpTo="@id/landingFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/flavorFragment"
@@ -36,7 +38,9 @@
             app:destination="@id/toppingsFragment" />
         <action
             android:id="@+id/action_flavorFragment_to_landingFragment"
-            app:destination="@id/landingFragment" />
+            app:destination="@id/landingFragment"
+            app:popUpTo="@id/landingFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/toppingsFragment"
@@ -48,7 +52,9 @@
             app:destination="@id/orderSummaryFragment" />
         <action
             android:id="@+id/action_toppingsFragment_to_landingFragment"
-            app:destination="@id/landingFragment" />
+            app:destination="@id/landingFragment"
+            app:popUpTo="@id/landingFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/orderSummaryFragment"
@@ -57,6 +63,8 @@
         tools:layout="@layout/fragment_order_summary">
         <action
             android:id="@+id/action_orderSummaryFragment_to_landingFragment"
-            app:destination="@id/landingFragment" />
+            app:destination="@id/landingFragment"
+            app:popUpTo="@id/landingFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

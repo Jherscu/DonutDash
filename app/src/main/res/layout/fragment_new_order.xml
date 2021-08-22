@@ -39,6 +39,8 @@
                     android:id="@+id/name_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:imeOptions="actionDone"
+                    android:text="@{viewModel.name}"
                     android:inputType="textPersonName" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -71,7 +73,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="230dp"
-                android:onClick="@{() -> }"
+                android:onClick="@{() -> newOrderFragment.cancelOrder()}"
                 android:text="@string/cancel_order"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/next_button"
@@ -84,7 +86,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="230dp"
-                android:onClick="@{() -> }"
+                android:onClick="@{() -> newOrderFragment.nextScreen()}"
                 android:text="@string/next"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
