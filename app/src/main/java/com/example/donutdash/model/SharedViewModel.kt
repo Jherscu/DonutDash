@@ -17,6 +17,7 @@ class SharedViewModel: ViewModel() {
         "Caramel Drizzle",
         "Marshmallow Fluff",
         "Jam",
-        "Pop Rocks",)
+        "Pop Rocks",
+        "NO TOPPING",)
 
 }
