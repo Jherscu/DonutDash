@@ -9,5 +9,14 @@ class SharedViewModel: ViewModel() {
      * It also maintains the necessary calculations to keep them up to date.
      */
 
+    val toppings = listOf<String>(
+        "Sprinkles",
+        "Strawberries",
+        "Oreo Crumble",
+        "Ice Cream",
+        "Caramel Drizzle",
+        "Marshmallow Fluff",
+        "Jam",
+        "Pop Rocks",)
 
 }

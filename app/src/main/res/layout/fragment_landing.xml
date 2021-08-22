@@ -69,6 +69,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/order_recycler_view"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     android:layout_width="match_parent"
                     android:layout_height="198dp"
                     android:layout_marginStart="4dp"
