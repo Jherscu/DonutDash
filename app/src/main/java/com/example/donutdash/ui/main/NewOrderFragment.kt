@@ -10,11 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.donutdash.R
 import com.example.donutdash.databinding.FragmentNewOrderBinding
 import com.example.donutdash.model.SharedViewModel
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * [NewOrderFragment] is the first fragment displayed when starting a new order of donuts.
@@ -42,11 +45,12 @@ class NewOrderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.apply {
-            // must first be created as variables in data binding layout in corresponding fragment_new_order.xml
+            // Must first be created as variables in data binding layout in corresponding fragment_new_order.xml
             newOrderFragment = this@NewOrderFragment
             viewModel = sharedViewModel
-            // associates lifecycle owner of fragment to LiveData object variables, so they can be tracked through the app
+            // Associates lifecycle owner of fragment to LiveData object variables, so they can be tracked through the app
             lifecycleOwner = viewLifecycleOwner
+            // When text in name box changes, set the _name variable in sharedViewModel
             nameInputEditText.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                 }
@@ -67,6 +71,12 @@ class NewOrderFragment : Fragment() {
                 respondToKeyEvent(view, keycode)
             }
         }
+
+        val dSpinner = binding!!.dateSpinner
+        val tSpinner = binding!!.timeSpinner
+
+        createSpinnerAdapter(requireContext(), dSpinner, sharedViewModel.getPickupDates().toTypedArray())
+        createSpinnerAdapter(requireContext(), tSpinner, sharedViewModel.toppings.toTypedArray())
     }
 
     /**
@@ -85,9 +95,34 @@ class NewOrderFragment : Fragment() {
     }
 
     /**
+     * Creates a spinner adapter for the time and date spinners.
+     */
+    private fun createSpinnerAdapter(context: Context, spinner: Spinner, array: Array<String>) {
+        ArrayAdapter(
+            context,
+            android.R.layout.simple_spinner_item,
+            array
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+        }
+    }
+
+    /**
      * Takes user to next stage of donut order.
      */
     fun nextScreen() {
+        if (sharedViewModel.hasNoNameSet()) {
+            // returns focus to name editText and creates explanatory snackbar
+            binding?.nameInputEditText?.requestFocus()
+            Snackbar.make(requireView(),"Please enter your name", Snackbar.LENGTH_LONG)
+                .setAction("DISMISS", View.OnClickListener {})
+                .show()
+            return
+        }
+
         findNavController().navigate(R.id.action_newOrderFragment_to_flavorFragment)
     }
 

@@ -53,9 +53,8 @@ class LandingFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (/* list of saved, completed orders exists */) {
-            loadOrders()
-        }
+        /* if list of saved, completed orders exists */
+        //   loadOrders()
     }
 
     fun startNewOrder() {

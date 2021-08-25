@@ -14,69 +14,75 @@
             type="com.example.donutdash.model.SharedViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.main.ToppingsFragment">
+        android:layout_height="wrap_content"
+        tools:context=".ui.main.ToppingsFragment" >
 
-        <TextView
-            android:id="@+id/toppings_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/choose_toppings"
-            app:layout_constraintBottom_toTopOf="@id/toppings_recycler_view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/toppings_recycler_view"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="500dp"
-            app:layout_constraintBottom_toTopOf="@id/subtotal_display"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toppings_label" />
+            android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/subtotal_display"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{}"
-            app:layout_constraintBottom_toTopOf="@id/cancel_order_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toppings_recycler_view"
-            tools:text="Price: $32.59" />
+            <TextView
+                android:id="@+id/toppings_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_toppings"
+                app:layout_constraintBottom_toTopOf="@id/toppings_recycler_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/cancel_order_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="70dp"
-            android:onClick="@{() -> toppingsFragment.cancelOrder()}"
-            android:text="@string/cancel_order"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/next_button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/subtotal_display" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/toppings_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                app:layout_constraintBottom_toTopOf="@id/subtotal_display"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toppings_label" />
 
-        <Button
-            android:id="@+id/next_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="70dp"
-            android:onClick="@{() -> toppingsFragment.nextScreen()}"
-            android:text="@string/next"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cancel_order_button"
-            app:layout_constraintTop_toBottomOf="@id/subtotal_display" />
+            <TextView
+                android:id="@+id/subtotal_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{}"
+                app:layout_constraintBottom_toTopOf="@id/cancel_order_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toppings_recycler_view"
+                tools:text="Price: $32.59" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/cancel_order_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="70dp"
+                android:onClick="@{() -> toppingsFragment.cancelOrder()}"
+                android:text="@string/cancel_order"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/next_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/subtotal_display" />
+
+            <Button
+                android:id="@+id/next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="70dp"
+                android:onClick="@{() -> toppingsFragment.nextScreen()}"
+                android:text="@string/next"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cancel_order_button"
+                app:layout_constraintTop_toBottomOf="@id/subtotal_display" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </layout>
