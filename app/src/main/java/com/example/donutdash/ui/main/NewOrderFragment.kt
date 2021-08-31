@@ -4,14 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.donutdash.R
@@ -70,13 +69,22 @@ class NewOrderFragment : Fragment() {
             nameInputEditText.setOnKeyListener { view, keycode, _ ->
                 respondToKeyEvent(view, keycode)
             }
+            dateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    if (position != 0) {
+                        viewModel!!.setDate(parent!!.getItemAtPosition(position).toString())
+                        newOrderFragment!!.initTimeSpinnerAdapter()
+                        timeSpinner.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                }
+            }
         }
 
-        val dSpinner = binding!!.dateSpinner
-        val tSpinner = binding!!.timeSpinner
-
-        createSpinnerAdapter(requireContext(), dSpinner, sharedViewModel.getPickupDates().toTypedArray())
-        createSpinnerAdapter(requireContext(), tSpinner, sharedViewModel.toppings.toTypedArray())
+        // Creates spinner adapter of upcoming dates available for pickup
+        createSpinnerAdapter(requireContext(), binding!!.dateSpinner, sharedViewModel.getPickupDates().toTypedArray())
     }
 
     /**
@@ -111,6 +119,13 @@ class NewOrderFragment : Fragment() {
     }
 
     /**
+     * Calls createSpinnerAdapter() for time spinner with business hours for the selected date.
+     */
+    fun initTimeSpinnerAdapter() {
+        createSpinnerAdapter(requireContext(), binding!!.timeSpinner, sharedViewModel.getPickupTimes(sharedViewModel.date.value.toString()).toTypedArray())
+    }
+
+    /**
      * Takes user to next stage of donut order.
      */
     fun nextScreen() {
@@ -118,6 +133,24 @@ class NewOrderFragment : Fragment() {
             // returns focus to name editText and creates explanatory snackbar
             binding?.nameInputEditText?.requestFocus()
             Snackbar.make(requireView(),"Please enter your name", Snackbar.LENGTH_LONG)
+                .setAction("DISMISS", View.OnClickListener {})
+                .show()
+            return
+        }
+
+        if (sharedViewModel.hasNoDateSet()) {
+            // returns focus to date spinner and creates explanatory snackbar
+            binding?.dateSpinner?.requestFocus()
+            Snackbar.make(requireView(),"Please enter pickup date", Snackbar.LENGTH_LONG)
+                .setAction("DISMISS", View.OnClickListener {})
+                .show()
+            return
+        }
+
+        if (sharedViewModel.hasNoTimeSet()) {
+            // returns focus to date spinner and creates explanatory snackbar
+            binding?.timeSpinner?.requestFocus()
+            Snackbar.make(requireView(),"Please enter pickup time", Snackbar.LENGTH_LONG)
                 .setAction("DISMISS", View.OnClickListener {})
                 .show()
             return

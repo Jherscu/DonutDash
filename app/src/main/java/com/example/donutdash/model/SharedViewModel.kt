@@ -2,8 +2,8 @@ package com.example.donutdash.model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -44,12 +44,6 @@ class SharedViewModel: ViewModel() {
     // Time for this order
     private val _time = MutableLiveData<String>()
     val time: LiveData<String> = _time
-
-    // List of possible pickup days
-    // val dateOptions: List<String> = getPickupDates()
-
-    // List of possible pickup times
-    // val timeOptions: List<String> = getPickupTimes()
 
     // Quantity of cupcakes in order
     // private val _quantity = MutableLiveData<Int>()
@@ -101,7 +95,16 @@ class SharedViewModel: ViewModel() {
      * @param pickupDate is the date set for pickup.
      */
     fun setDate(pickupDate: String) {
-        _date.value = pickupDate
+        if (pickupDate != "Select Pickup Date") {
+            _date.value = pickupDate
+        }
+    }
+
+    /**
+     * Returns true if a date has not been selected for the order yet. Returns false otherwise.
+     */
+    fun hasNoDateSet(): Boolean {
+        return _date.value.isNullOrEmpty()
     }
 
     /**
@@ -110,11 +113,20 @@ class SharedViewModel: ViewModel() {
      * @param pickupTime is the date set for pickup.
      */
     fun setTime(pickupTime: String) {
-        _time.value = pickupTime
+        if (pickupTime != "Select Pickup Time") {
+            _time.value = pickupTime
+        }
+    }
+
+    /**
+     * Returns true if a time has not been selected for the order yet. Returns false otherwise.
+     */
+    fun hasNoTimeSet(): Boolean {
+        return _time.value.isNullOrEmpty()
     }
 
     // Day to (AM to PM)
-    private val businessHours = mapOf<String, Pair<Double, Double>>(
+    private val _businessHours = mapOf<String, Pair<Double, Double>>(
         "Sun" to (7.00 to 5.30),
         "Mon" to (6.30 to 8.00),
         "Tue" to (6.30 to 8.00),
@@ -124,37 +136,112 @@ class SharedViewModel: ViewModel() {
         "Sat" to (6.00 to 10.00),
     )
 
+    private val _hoursList = listOf<Double>(
+        6.00,
+        6.30,
+        7.00,
+        7.30,
+        8.00,
+        8.30,
+        9.00,
+        9.30,
+        10.00,
+        10.30,
+        11.00,
+        11.30,
+        12.00,
+        12.30,
+        1.00,
+        1.30,
+        2.00,
+        2.30,
+        3.00,
+        3.30,
+        4.00,
+        4.30,
+        5.00,
+        5.30,
+        6.00,
+        6.30,
+        7.00,
+        7.30,
+        8.00,
+        8.30,
+        9.00,
+        9.30,
+        10.00,
+    )
+
     /**
      * Returns list of available dates for pickup of order.
      */
     fun getPickupDates(): List<String> {
+        val dateOptions = mutableListOf("Select Pickup Date")
         val calendarRightNow = Calendar.getInstance()
-        val dateOptions = mutableListOf<String>()
 
         val dayFormatter = SimpleDateFormat("EEE LLL dd", Locale.getDefault())
         val dayFormatCheck = SimpleDateFormat("EEE", Locale.getDefault())
 
+        // If this current day is a day on which the business is open, add it as a possible delivery date
+        // Then check for each other day of the week after today
         repeat (7) {
-            if (dayFormatCheck.format(calendarRightNow.time) in businessHours.keys) {
+            if (dayFormatCheck.format(calendarRightNow.time) in _businessHours.keys) {
                 dateOptions.add(dayFormatter.format(calendarRightNow.time))
                 calendarRightNow.add(Calendar.DATE, 1)
             } else {calendarRightNow.add(Calendar.DATE, 1)}
         }
+
         return dateOptions.toList()
     }
 
     /**
      * Returns list of available times for pickup of order within selected pickup date.
      */
-    /* private fun getPickupTimes(): List<String> {
-        val calendarRightNow = Calendar.getInstance()
-        val timeOptions = mutableListOf<String>()
+    fun getPickupTimes(fullDate: String): List<String> {
 
-        private val timeFormatter = SimpleDateFormat("h:mm aa", Locale.getDefault())
-        private val timeFormatCheck = SimpleDateFormat("h.mm", Locale.getDefault())
+        val date = Regex("""\A\w\w\w""").find(fullDate)?.value
 
-        return timeOptions
-    } */
+        var hours: Pair<Double, Double> = (0.0 to 0.0)
+
+        // Gets hours of operation for selected delivery date
+        for (day in _businessHours.keys) {
+            if (date == day) {
+                hours = _businessHours.getValue(day)
+            }
+        }
+
+        return when (hours) {
+            (0.0 to 0.0) -> {
+                // Returns placeholder for timeslots
+                listOf("")
+            }
+            else -> {
+                // Gets list of pickup times from opening to close of business
+                val start = _hoursList.indexOf(hours.first)
+                val end = _hoursList.lastIndexOf(hours.second)
+
+                val doubleList = _hoursList.subList(start, end).map { dbl -> dbl.toString() }
+
+                val formattedList :List<String> = doubleList.map { dbl ->
+                    val hour = Regex("""^\d+""").find(dbl)?.value
+                    val min = Regex("""\d$""").find(dbl)?.value
+                    try {
+                        when (hour!!.length) {
+                            2 -> "$hour:${min}0"
+                            1 -> "0$hour:${min}0"
+                            else -> throw IOException("Hours are invalid")
+                        }
+                    } catch (exception: IOException) {
+                        return listOf("Time Format Error")
+                    }
+                }
+
+                val finalList = mutableListOf("Select Pickup Time").plus(formattedList).toList()
+
+                finalList
+            }
+        }
+    }
 
     fun setQuantity(vararg donuts: Int) {
         TODO("intake donut amounts from flavor fragment and accumulate them to total # of donuts")

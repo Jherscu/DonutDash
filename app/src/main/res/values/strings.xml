@@ -27,4 +27,7 @@
     <string name="_20">20%</string>
     <string name="custom">Custom</string>
     <string name="tip_amount">Tip\n Amount:</string>
+    <string name="order_name">Name for order</string>
+    <string name="dates_for_pickup">Dates for pickup</string>
+    <string name="times_for_pickup">Times for pickup</string>
 </resources>
