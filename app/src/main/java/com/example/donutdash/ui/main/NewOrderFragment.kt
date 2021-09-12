@@ -1,9 +1,12 @@
 package com.example.donutdash.ui.main
 
+import android.content.ContentValues.TAG
 import android.content.Context
+import android.nfc.Tag
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.view.inputmethod.InputMethodManager
@@ -69,12 +72,25 @@ class NewOrderFragment : Fragment() {
             nameInputEditText.setOnKeyListener { view, keycode, _ ->
                 respondToKeyEvent(view, keycode)
             }
+            // When date is selected, sets date, initializes time spinner adapter, and makes the time
+            // spinner visible
             dateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    // If a date has already been picked, and it is not the same as the current date, and the user is not trying
+                    // to reselect "Select Pickup Options", it reinitialize the time, and timeOptions
+                    if ((sharedViewModel.date.value != "") && (sharedViewModel.datePosition.value != position) && (position != 0)) {
+                        // Resets time using arbitrary number that's not possible to be returned under normal operation of the function
+                        sharedViewModel.setTime("",-2)
+                        newOrderFragment!!.initTimeSpinnerAdapter()
+                        sharedViewModel.setDate(parent!!.getItemAtPosition(position).toString(), position)
+                    }
+                    // Sets date on first pick
                     if (position != 0) {
-                        viewModel!!.setDate(parent!!.getItemAtPosition(position).toString())
+                        sharedViewModel.setDate(parent!!.getItemAtPosition(position).toString(), position)
                         newOrderFragment!!.initTimeSpinnerAdapter()
                         timeSpinner.visibility = View.VISIBLE
+                    } else {
+                        sharedViewModel.setDate(parent!!.getItemAtPosition(sharedViewModel.datePosition.value!!).toString(), sharedViewModel.datePosition.value!!)
                     }
                 }
 
@@ -82,7 +98,6 @@ class NewOrderFragment : Fragment() {
                 }
             }
         }
-
         // Creates spinner adapter of upcoming dates available for pickup
         createSpinnerAdapter(requireContext(), binding!!.dateSpinner, sharedViewModel.getPickupDates().toTypedArray())
     }
@@ -93,8 +108,7 @@ class NewOrderFragment : Fragment() {
     private fun respondToKeyEvent(view: View, keyCode: Int): Boolean {
         if (keyCode == KeyEvent.KEYCODE_ENTER) {
             // hide keyboard
-            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
+            (activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view.windowToken, 0)
             // transfer focus to submit button
             binding?.dateSpinner?.requestFocus()
             return true
@@ -119,10 +133,29 @@ class NewOrderFragment : Fragment() {
     }
 
     /**
-     * Calls createSpinnerAdapter() for time spinner with business hours for the selected date.
+     * Calls createSpinnerAdapter() for time spinner with business hours for the selected date,
+     * and sets up the item selected listener.
      */
     fun initTimeSpinnerAdapter() {
-        createSpinnerAdapter(requireContext(), binding!!.timeSpinner, sharedViewModel.getPickupTimes(sharedViewModel.date.value.toString()).toTypedArray())
+        createSpinnerAdapter(
+            requireContext(),
+            binding!!.timeSpinner,
+            sharedViewModel.getPickupTimes(sharedViewModel.date.value.toString()).toTypedArray()
+        )
+        binding!!.timeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // Saves position for displaying the time when the fragment goes through lifecycle changes
+                val watchPosition = if ((sharedViewModel.timePosition.value != 0) && (position == 0)) {
+                    sharedViewModel.timePosition.value!!
+                } else {
+                    position
+                }
+                sharedViewModel.setTime(parent!!.getItemAtPosition(position).toString(), watchPosition)
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+        }
     }
 
     /**

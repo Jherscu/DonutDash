@@ -45,6 +45,14 @@ class SharedViewModel: ViewModel() {
     private val _time = MutableLiveData<String>()
     val time: LiveData<String> = _time
 
+    // Position of selected date
+    private val _datePosition = MutableLiveData<Int>()
+    val datePosition: LiveData<Int> = _datePosition
+
+    // Position of selected time
+    private val _timePosition = MutableLiveData<Int>()
+    val timePosition: LiveData<Int> = _timePosition
+
     // Quantity of cupcakes in order
     // private val _quantity = MutableLiveData<Int>()
     // val quantity: LiveData<String> = _quantity
@@ -90,13 +98,15 @@ class SharedViewModel: ViewModel() {
     }
 
     /**
-     * Set the pickup date for this order.
+     * Set the pickup date for this order, and save its position in the spinner.
      *
      * @param pickupDate is the date set for pickup.
+     * @param optionPosition is its position in the spinner.
      */
-    fun setDate(pickupDate: String) {
-        if (pickupDate != "Select Pickup Date") {
+    fun setDate(pickupDate: String, optionPosition: Int) {
+        if (optionPosition != 0) {
             _date.value = pickupDate
+            _datePosition.value = optionPosition
         }
     }
 
@@ -108,13 +118,19 @@ class SharedViewModel: ViewModel() {
     }
 
     /**
-     * Set the pickup time for this order.
+     * Set the pickup time for this order, and save its position in the spinner.
      *
      * @param pickupTime is the date set for pickup.
+     * @param optionPosition is its position in the spinner.
      */
-    fun setTime(pickupTime: String) {
-        if (pickupTime != "Select Pickup Time") {
+    fun setTime(pickupTime: String, optionPosition: Int) {
+        if (optionPosition != 0) {
             _time.value = pickupTime
+            _timePosition.value = optionPosition
+        }
+        if (optionPosition == -2) {
+            _time.value = pickupTime
+            _timePosition.value = 0
         }
     }
 
@@ -220,7 +236,7 @@ class SharedViewModel: ViewModel() {
                 val start = _hoursList.indexOf(hours.first)
                 val end = _hoursList.lastIndexOf(hours.second)
 
-                val doubleList = _hoursList.subList(start, end).map { dbl -> dbl.toString() }
+                val doubleList = _hoursList.subList(start, (end + 1)).map { dbl -> dbl.toString() }
 
                 val formattedList :List<String> = doubleList.map { dbl ->
                     val hour = Regex("""^\d+""").find(dbl)?.value
@@ -235,8 +251,11 @@ class SharedViewModel: ViewModel() {
                         return listOf("Time Format Error")
                     }
                 }
+                val secondListA = formattedList.subList(0, formattedList.indexOf("12:00")).map { time -> "$time A.M." }
 
-                val finalList = mutableListOf("Select Pickup Time").plus(formattedList).toList()
+                val secondListB = formattedList.subList(formattedList.indexOf("12:00"), formattedList.size).map { time -> "$time P.M." }
+
+                val finalList =  mutableListOf("Select Pickup Time").plus(secondListA.plus(secondListB)).toList()
 
                 finalList
             }
@@ -248,12 +267,14 @@ class SharedViewModel: ViewModel() {
     }
 
     /**
-     * Reset order by returning name, date, time, and quantity values to blank state
+     * Reset order by returning name, date, time, and quantity values to blank state.
      */
     fun resetOrder() {
         _name.value = ""
         _date.value = ""
         _time.value = ""
+        _timePosition.value = 0
+        _datePosition.value = 0
         // _quantity.value = 0
         // _price.value = 0.0
     }

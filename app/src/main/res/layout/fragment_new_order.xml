@@ -48,13 +48,12 @@
 
 
             <!-- When selecting same day pickup a dialog will pop
-            android:onItemSelected="@{(parent, view, position, id) -> viewModel.setDate(parent.getItemAtPosition(position).toString())}"
             up warning that not all flavors will be available -->
             <Spinner
                 android:id="@+id/date_spinner"
                 android:layout_width="160dp"
                 android:contentDescription="@string/dates_for_pickup"
-                android:selectedItemPosition="@{dateSpinner.position}"
+                android:selectedItemPosition="@{viewModel.datePosition}"
                 android:layout_height="48dp"
                 android:layout_marginBottom="110dp"
                 app:layout_constraintBottom_toTopOf="@id/cancel_order_button"
@@ -67,9 +66,9 @@
                 android:visibility="invisible"
                 android:layout_width="160dp"
                 android:contentDescription="@string/times_for_pickup"
+                android:selectedItemPosition="@{viewModel.timePosition}"
                 android:layout_height="48dp"
                 android:layout_marginBottom="110dp"
-                android:onItemSelected="@{(parent, view, position, id) -> viewModel.setTime(parent.getItemAtPosition(position).toString())}"
                 app:layout_constraintBottom_toTopOf="@id/cancel_order_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:spinnerMode="dialog"
