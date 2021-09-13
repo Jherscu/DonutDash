@@ -2,6 +2,7 @@ package com.example.donutdash.model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -53,15 +54,55 @@ class SharedViewModel: ViewModel() {
     private val _timePosition = MutableLiveData<Int>()
     val timePosition: LiveData<Int> = _timePosition
 
-    // Quantity of cupcakes in order
-    // private val _quantity = MutableLiveData<Int>()
-    // val quantity: LiveData<String> = _quantity
+    // Quantity of chocolate donuts in order
+    private val _chocolateQuantity = MutableLiveData<Int>()
+    val chocolateQuantity: LiveData<Int> = _chocolateQuantity
+
+    // Quantity of berry donuts in order
+    private val _berryQuantity = MutableLiveData<Int>()
+    val berryQuantity: LiveData<Int> = _berryQuantity
+
+    // Quantity of vanilla donuts in order
+    private val _vanillaQuantity = MutableLiveData<Int>()
+    val vanillaQuantity: LiveData<Int> = _vanillaQuantity
+
+    // Quantity of caramel donuts in order
+    private val _caramelQuantity = MutableLiveData<Int>()
+    val caramelQuantity: LiveData<Int> = _caramelQuantity
+
+    // Quantity of taro donuts in order
+    private val _taroQuantity = MutableLiveData<Int>()
+    val taroQuantity: LiveData<Int> = _taroQuantity
+
+    // Quantity of churro donuts in order
+    private val _churroQuantity = MutableLiveData<Int>()
+    val churroQuantity: LiveData<Int> = _churroQuantity
+
+    // Quantity of lingonberry jam donuts in order
+    private val _lingonberryJamQuantity = MutableLiveData<Int>()
+    val lingonberryJamQuantity: LiveData<Int> = _lingonberryJamQuantity
+
+    // Quantity of boston creme donuts in order
+    private val _bostonCremeQuantity = MutableLiveData<Int>()
+    val bostonCremeQuantity: LiveData<Int> = _bostonCremeQuantity
+
+    // Quantity of powdered donuts in order
+    private val _powderedQuantity = MutableLiveData<Int>()
+    val powderedQuantity: LiveData<Int> = _powderedQuantity
+
+    // Quantity of apple fritter donuts in order
+    private val _appleFritterQuantity = MutableLiveData<Int>()
+    val appleFritterQuantity: LiveData<Int> = _appleFritterQuantity
+
+    // Overall quantity of the donuts in the order
+    private val _overallQuantity = MutableLiveData<Int>()
+    val overallQuantity: LiveData<Int> = _overallQuantity
 
     // Price of the order
-    // private val _price = MutableLiveData<Double>()
-    // val price: LiveData<String> = Transformations.map(_price) {
-
-    // }
+    private val _price = MutableLiveData<Double>()
+    val price: LiveData<String> = Transformations.map(_price) {
+        cost -> cost.toString()
+    }
 
     // Reset options for order
     init {
@@ -262,8 +303,43 @@ class SharedViewModel: ViewModel() {
         }
     }
 
-    fun setQuantity(vararg donuts: Int) {
-        TODO("intake donut amounts from flavor fragment and accumulate them to total # of donuts")
+    /**
+     * Sets the quantity of whatever flavor it is passed
+     *
+     * @param quantity is the amount of donuts for the flavor.
+     * @param flavor is the flavor of the donut to adjust.
+     */
+    fun setFlavorQuantity(quantity: Int, flavor: String) {
+        when (flavor) {
+            "Chocolate" -> _chocolateQuantity.value = quantity
+            "Berry" -> _berryQuantity.value = quantity
+            "Vanilla" -> _vanillaQuantity.value = quantity
+            "Caramel" -> _caramelQuantity.value = quantity
+            "Taro" -> _taroQuantity.value = quantity
+            "Churro" -> _churroQuantity.value = quantity
+            "Lingonberry Jam" -> _lingonberryJamQuantity.value = quantity
+            "Boston Creme" -> _bostonCremeQuantity.value = quantity
+            "Powdered" -> _powderedQuantity.value = quantity
+            "Apple Fritter" -> _appleFritterQuantity.value = quantity
+        }
+    }
+
+    /**
+     * Sets the price of the order at each stage of the order process.
+     *
+     * @param currentTotal is the total after each stage of the order process.
+     */
+    fun setPrice(currentTotal: Double) {
+        _price.value = currentTotal
+    }
+
+    /**
+     * Sets the overall amount of donuts in the order.
+     *
+     * @param donuts is the amount for each donut in the order
+     */
+    fun setOverallQuantity(vararg donuts: Int) {
+        _overallQuantity.value = donuts.toList().reduce {acc: Int, i: Int -> acc + i }
     }
 
     /**
@@ -275,7 +351,17 @@ class SharedViewModel: ViewModel() {
         _time.value = ""
         _timePosition.value = 0
         _datePosition.value = 0
-        // _quantity.value = 0
-        // _price.value = 0.0
+        _chocolateQuantity.value = 0
+        _berryQuantity.value = 0
+        _vanillaQuantity.value = 0
+        _caramelQuantity.value = 0
+        _taroQuantity.value = 0
+        _churroQuantity.value = 0
+        _lingonberryJamQuantity.value = 0
+        _bostonCremeQuantity.value = 0
+        _powderedQuantity.value = 0
+        _appleFritterQuantity.value = 0
+        _overallQuantity.value = 0
+        _price.value = 0.0
     }
 }

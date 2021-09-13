@@ -16,7 +16,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         tools:context=".ui.main.FlavorFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,7 +36,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/flavor_wrapper"
                 android:layout_width="360dp"
-                android:layout_height="450dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@id/subtotal_display"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -44,12 +44,13 @@
 
                 <LinearLayout
                     android:id="@+id/chocolate_box"
+                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@id/berry_box"
-                    app:layout_constraintEnd_toStartOf="@id/churro_box"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/berry_box"
+                    app:layout_constraintEnd_toStartOf="@id/lingonberry_jam_box"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
@@ -60,18 +61,20 @@
 
                     <NumberPicker
                         android:id="@+id/number_chocolate"
-                        android:layout_width="52dp"
-                        android:layout_height="36dp" />
+                        android:value="@{viewModel.chocolateQuantity}"
+                        android:onValueChange="@{(picker, old, new) -> viewModel.setFlavorQuantity(new, @string/chocolate)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/berry_box"
+                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toTopOf="@id/vanilla_box"
-                    app:layout_constraintEnd_toStartOf="@id/lingonberry_jam_box"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/vanilla_box"
                     app:layout_constraintTop_toBottomOf="@id/chocolate_box">
 
                     <TextView
@@ -82,18 +85,20 @@
 
                     <NumberPicker
                         android:id="@+id/number_berry"
-                        android:layout_width="52dp"
-                        android:layout_height="36dp" />
+                        android:value="@{viewModel.berryQuantity}"
+                        android:onValueChange="@{(picker, old, new) -> viewModel.setFlavorQuantity(new, @string/berry)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/vanilla_box"
+                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toTopOf="@id/caramel_box"
-                    app:layout_constraintEnd_toStartOf="@id/boston_creme_box"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/caramel_box"
                     app:layout_constraintTop_toBottomOf="@id/berry_box">
 
                     <TextView
@@ -104,18 +109,20 @@
 
                     <NumberPicker
                         android:id="@+id/number_vanilla"
-                        android:layout_width="52dp"
-                        android:layout_height="36dp" />
+                        android:value="@{viewModel.vanillaQuantity}"
+                        android:onValueChange="@{(picker, old, new) -> viewModel.setFlavorQuantity(new, @string/vanilla)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/caramel_box"
+                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toTopOf="@id/taro_box"
-                    app:layout_constraintEnd_toStartOf="@id/powdered_box"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/taro_box"
                     app:layout_constraintTop_toBottomOf="@id/vanilla_box">
 
                     <TextView
@@ -126,18 +133,20 @@
 
                     <NumberPicker
                         android:id="@+id/number_caramel"
-                        android:layout_width="52dp"
-                        android:layout_height="36dp" />
+                        android:value="@{viewModel.caramelQuantity}"
+                        android:onValueChange="@{(picker, old, new) -> viewModel.setFlavorQuantity(new, @string/caramel)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/taro_box"
+                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/apple_fritter_box"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/chocolate_box"
                     app:layout_constraintTop_toBottomOf="@id/caramel_box">
 
                     <TextView
@@ -148,17 +157,19 @@
 
                     <NumberPicker
                         android:id="@+id/number_taro"
-                        android:layout_width="52dp"
-                        android:layout_height="36dp" />
+                        android:value="@{viewModel.taroQuantity}"
+                        android:onValueChange="@{(picker, old, new) -> viewModel.setFlavorQuantity(new, @string/taro)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/churro_box"
+                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/chocolate_box"
+                    app:layout_constraintEnd_toEndOf="@id/lingonberry_jam_box"
                     app:layout_constraintTop_toTopOf="@id/chocolate_box">
 
                     <TextView
@@ -169,17 +180,20 @@
 
                     <NumberPicker
                         android:id="@+id/number_churro"
-                        android:layout_width="52dp"
-                        android:layout_height="36dp" />
+                        android:value="@{viewModel.churroQuantity}"
+                        android:onValueChange="@{(picker, old, new) -> viewModel.setFlavorQuantity(new, @string/churro)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/lingonberry_jam_box"
+                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/berry_box"
+                    app:layout_constraintStart_toEndOf="@id/chocolate_box"
                     app:layout_constraintTop_toTopOf="@id/berry_box">
 
                     <TextView
@@ -190,17 +204,19 @@
 
                     <NumberPicker
                         android:id="@+id/number_lingonberry_jam"
-                        android:layout_width="52dp"
-                        android:layout_height="36dp" />
+                        android:value="@{viewModel.lingonberryJamQuantity}"
+                        android:onValueChange="@{(picker, old, new) -> viewModel.setFlavorQuantity(new, @string/lingonberry_jam)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/boston_creme_box"
+                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/vanilla_box"
+                    app:layout_constraintEnd_toEndOf="@id/powdered_box"
                     app:layout_constraintTop_toTopOf="@id/vanilla_box">
 
                     <TextView
@@ -211,17 +227,19 @@
 
                     <NumberPicker
                         android:id="@+id/number_boston_creme"
-                        android:layout_width="52dp"
-                        android:layout_height="36dp" />
+                        android:value="@{viewModel.bostonCremeQuantity}"
+                        android:onValueChange="@{(picker, old, new) -> viewModel.setFlavorQuantity(new, @string/boston_creme)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/powdered_box"
+                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/caramel_box"
+                    app:layout_constraintEnd_toEndOf="@id/apple_fritter_box"
                     app:layout_constraintTop_toTopOf="@id/caramel_box">
 
                     <TextView
@@ -232,17 +250,19 @@
 
                     <NumberPicker
                         android:id="@+id/number_powdered"
-                        android:layout_width="52dp"
-                        android:layout_height="36dp" />
+                        android:value="@{viewModel.powderedQuantity}"
+                        android:onValueChange="@{(picker, old, new) -> viewModel.setFlavorQuantity(new, @string/powdered)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/apple_fritter_box"
+                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/taro_box"
+                    app:layout_constraintEnd_toEndOf="@id/churro_box"
                     app:layout_constraintTop_toTopOf="@id/taro_box">
 
                     <TextView
@@ -253,8 +273,10 @@
 
                     <NumberPicker
                         android:id="@+id/number_apple_fritter"
-                        android:layout_width="52dp"
-                        android:layout_height="36dp" />
+                        android:value="@{viewModel.appleFritterQuantity}"
+                        android:onValueChange="@{(picker, old, new) -> viewModel.setFlavorQuantity(new, @string/apple_fritter)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -263,7 +285,7 @@
                 android:id="@+id/subtotal_display"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{}"
+                android:text="@{viewModel.price}"
                 app:layout_constraintBottom_toTopOf="@id/cancel_order_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

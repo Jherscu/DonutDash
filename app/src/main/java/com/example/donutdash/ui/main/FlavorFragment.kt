@@ -1,9 +1,13 @@
 package com.example.donutdash.ui.main
 
+import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.NumberPicker
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -43,13 +47,142 @@ class FlavorFragment : Fragment() {
             // associates lifecycle owner of fragment to LiveData object variables, so they can be tracked through the app
             lifecycleOwner = viewLifecycleOwner
         }
+        // creates the number pickers
+        initPickers()
     }
 
     /**
-     * Takes user to next stage of donut order.
+     * Initializes the number pickers for the amount of donuts per flavor.
+     */
+    private fun initPickers() {
+        val pickerArray: Array<String> = (0..25).map { n -> "$n" }.toList().toTypedArray()
+        binding!!.apply {
+            numberChocolate.apply {
+                maxValue = 25
+                minValue = 0
+                displayedValues = pickerArray
+                setOnKeyListener { view, keycode, _ ->
+                    respondToKeyEvent(view, keycode)
+                }
+            }
+            numberBerry.apply {
+                maxValue = 25
+                minValue = 0
+                displayedValues = pickerArray
+                setOnKeyListener { view, keycode, _ ->
+                    respondToKeyEvent(view, keycode)
+                }
+            }
+            numberVanilla.apply {
+                maxValue = 25
+                minValue = 0
+                displayedValues = pickerArray
+                setOnKeyListener { view, keycode, _ ->
+                    respondToKeyEvent(view, keycode)
+                }
+            }
+            numberCaramel.apply {
+                maxValue = 25
+                minValue = 0
+                displayedValues = pickerArray
+                setOnKeyListener { view, keycode, _ ->
+                    respondToKeyEvent(view, keycode)
+                }
+            }
+            numberTaro.apply {
+                maxValue = 25
+                minValue = 0
+                displayedValues = pickerArray
+                setOnKeyListener { view, keycode, _ ->
+                    respondToKeyEvent(view, keycode)
+                }
+            }
+            numberChurro.apply {
+                maxValue = 25
+                minValue = 0
+                displayedValues = pickerArray
+                setOnKeyListener { view, keycode, _ ->
+                    respondToKeyEvent(view, keycode)
+                }
+            }
+            numberLingonberryJam.apply {
+                maxValue = 25
+                minValue = 0
+                displayedValues = pickerArray
+                setOnKeyListener { view, keycode, _ ->
+                    respondToKeyEvent(view, keycode)
+                }
+            }
+            numberBostonCreme.apply {
+                maxValue = 25
+                minValue = 0
+                displayedValues = pickerArray
+                setOnKeyListener { view, keycode, _ ->
+                    respondToKeyEvent(view, keycode)
+                }
+            }
+            numberPowdered.apply {
+                maxValue = 25
+                minValue = 0
+                displayedValues = pickerArray
+                setOnKeyListener { view, keycode, _ ->
+                    respondToKeyEvent(view, keycode)
+                }
+            }
+            numberAppleFritter.apply {
+                maxValue = 25
+                minValue = 0
+                displayedValues = pickerArray
+                setOnKeyListener { view, keycode, _ ->
+                    respondToKeyEvent(view, keycode)
+                }
+            }
+        }
+    }
+
+    /**
+     * Takes user to next stage of donut order, and sets overall amount of donuts ordered.
      */
     fun nextScreen() {
+        // list of all number pickers in the fragment
+        val numberPickerList: List<NumberPicker> = listOf(
+            binding!!.numberChocolate,
+            binding!!.numberBerry,
+            binding!!.numberVanilla,
+            binding!!.numberCaramel,
+            binding!!.numberTaro,
+            binding!!.numberChurro,
+            binding!!.numberLingonberryJam,
+            binding!!.numberBostonCreme,
+            binding!!.numberPowdered,
+            binding!!.numberAppleFritter
+        )
+
+        val tempList = mutableListOf<Int>()
+
+        for (picker in numberPickerList) {
+            if (picker.value != 0) {
+                tempList.add(picker.value)
+            }
+        }
+
+        val array: IntArray = tempList.toList().toIntArray()
+
+        sharedViewModel.setOverallQuantity(*array)
+
         findNavController().navigate(R.id.action_flavorFragment_to_toppingsFragment)
+    }
+
+    /**
+     * Close soft keyboard when enter is pressed on NumberPicker
+     */
+    private fun respondToKeyEvent(view: View, keyCode: Int): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            // hide keyboard
+            (activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view.windowToken, 0)
+            return true
+        }
+        return false
     }
 
     /**
