@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.donutdash.R
 import com.example.donutdash.databinding.FragmentNewOrderBinding
 import com.example.donutdash.model.SharedViewModel
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
 /**
@@ -76,6 +77,20 @@ class NewOrderFragment : Fragment() {
             // spinner visible
             dateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    // Launches Snackbar explaining same day pickup fee
+                    if (position == 1) {
+                        Snackbar.make(requireView(), "Same day pickup fee: $5.00", Snackbar.LENGTH_LONG)
+                            .setAction("DISMISS", View.OnClickListener {})
+                            .show()
+                    }
+
+                    // Snackbar explaining pickup fee removal when date is changed
+                    if (position != 1 && sharedViewModel.datePosition.value == 1) {
+                        Snackbar.make(requireView(), "Same day pickup fee removed", Snackbar.LENGTH_LONG)
+                            .setAction("DISMISS", View.OnClickListener {})
+                            .show()
+                    }
+
                     // If a date has already been picked, and it is not the same as the current date, and the user is not trying
                     // to reselect "Select Pickup Options", it reinitialize the time, and timeOptions
                     if ((sharedViewModel.date.value != "") && (sharedViewModel.datePosition.value != position) && (position != 0)) {
@@ -84,6 +99,7 @@ class NewOrderFragment : Fragment() {
                         newOrderFragment!!.initTimeSpinnerAdapter()
                         sharedViewModel.setDate(parent!!.getItemAtPosition(position).toString(), position)
                     }
+
                     // Sets date on first pick
                     if (position != 0) {
                         sharedViewModel.setDate(parent!!.getItemAtPosition(position).toString(), position)
