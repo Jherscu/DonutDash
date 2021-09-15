@@ -282,13 +282,23 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
+                android:id="@+id/subtotal_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/subtotal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/subtotal_display"
+                app:layout_constraintTop_toTopOf="@id/subtotal_display"
+                app:layout_constraintBottom_toBottomOf="@id/subtotal_display" />
+
+            <TextView
                 android:id="@+id/subtotal_display"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.price}"
                 app:layout_constraintBottom_toTopOf="@id/cancel_order_button"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/subtotal_label"
                 app:layout_constraintTop_toBottomOf="@id/flavor_wrapper"
                 tools:text="Price: $32.59" />
 

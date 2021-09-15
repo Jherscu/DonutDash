@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.donutdash.R
 import com.example.donutdash.databinding.FragmentFlavorBinding
 import com.example.donutdash.model.SharedViewModel
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * [FlavorFragment] is the second fragment in the donut order lifecycle, preceded by [NewOrderFragment]. In this view, the flavors
@@ -168,6 +169,15 @@ class FlavorFragment : Fragment() {
 
         val array: IntArray = tempList.toList().toIntArray()
 
+        if (sharedViewModel.hasNoDonutsSelected()) {
+            // Creates explanatory snackbar
+            Snackbar.make(requireView(),"Please buy one of our donuts :(", Snackbar.LENGTH_LONG)
+                .setAction("DISMISS", View.OnClickListener {})
+                .show()
+            return
+        }
+
+        // uses spread operator to pass varargs for setOverallQuantity() to reduce
         sharedViewModel.setOverallQuantity(*array)
 
         findNavController().navigate(R.id.action_flavorFragment_to_toppingsFragment)
