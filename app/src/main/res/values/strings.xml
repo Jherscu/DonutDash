@@ -6,6 +6,8 @@
     <string name="new_order">New Order</string>
     <string name="large_order">Large Order</string>
     <string name="large_order_query">"""Your order is over 65 donuts.\n There is a %1$s large order fee for large orders.\n\n Would you like to continue?"""</string>
+    <string name="fee_applied">Fee Applied</string>
+    <string name="remove_donut">To avoid the large order fee, remove donuts until you have less than 65 selected</string>
     <string name="cancel_existing_order">Cancel Existing Order</string>
     <string name="cancel_order">Cancel Order</string>
     <string name="next">Next</string>
