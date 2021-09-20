@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.donutdash.R
 import com.example.donutdash.databinding.FragmentFlavorBinding
 import com.example.donutdash.model.SharedViewModel
+import com.example.donutdash.ui.dialog.LargeOrderDialogFragment
 import com.google.android.material.snackbar.Snackbar
 
 /**
@@ -171,14 +172,23 @@ class FlavorFragment : Fragment() {
 
         if (sharedViewModel.hasNoDonutsSelected()) {
             // Creates explanatory snackbar
-            Snackbar.make(requireView(),"Please buy one of our donuts :(", Snackbar.LENGTH_LONG)
+            Snackbar.make(requireView(), "Please buy one of our donuts :(", Snackbar.LENGTH_LONG)
                 .setAction("DISMISS", View.OnClickListener {})
                 .show()
+
             return
         }
 
-        // uses spread operator to pass varargs for setOverallQuantity() to reduce
+        // Uses spread operator to pass varargs for setOverallQuantity() to reduce
         sharedViewModel.setOverallQuantity(*array)
+
+        // If a large order is made, a dialog warns about the large order fee,
+        // and an option is given to change it.
+        if (sharedViewModel.largeOrderFlag) {
+            LargeOrderDialogFragment().show(parentFragmentManager, "LargeOrderDialogFragment")
+
+            return
+        }
 
         findNavController().navigate(R.id.action_flavorFragment_to_toppingsFragment)
     }
@@ -189,7 +199,10 @@ class FlavorFragment : Fragment() {
     private fun respondToKeyEvent(view: View, keyCode: Int): Boolean {
         if (keyCode == KeyEvent.KEYCODE_ENTER) {
             // hide keyboard
-            (activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view.windowToken, 0)
+            (activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                view.windowToken,
+                0
+            )
             return true
         }
         return false

@@ -1,17 +1,24 @@
 package com.example.donutdash.ui.main
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.donutdash.R
+import com.example.donutdash.model.SharedViewModel
+import com.example.donutdash.ui.dialog.LargeOrderDialogFragment
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 /**
  * Activity that hosts the donut order flow.
  */
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), LargeOrderDialogFragment.LargeOrderDialogListener {
 
     // declare as lateinit in activity scope so it can be accessed in onSupportNavigateUp()
     private lateinit var navController: NavController
@@ -37,6 +44,33 @@ class MainActivity : AppCompatActivity() {
         Typically this is done in AppCompatActivity.onSupportNavigateUp. (Implemented Below)
          */
         setupActionBarWithNavController(navController)
+    }
+
+    /**
+     * If the user chooses to accept the large order fee, continues with confirmation message.
+     */
+    override fun onLargeOrderDialogPositiveClick() {
+        // Creates explanatory snackbar and navigates to the next fragment
+        Snackbar.make(findViewById(R.id.next_button),
+            R.string.fee_applied,
+            Snackbar.LENGTH_LONG)
+            .setAction("DISMISS", View.OnClickListener {})
+            .show()
+        navController.navigate(R.id.action_flavorFragment_to_toppingsFragment)
+    }
+
+
+    /**
+     * If the user chooses not to accept the large order fee, a message is
+     * displayed asking the user to remove a donut.
+     */
+    override fun onLargeOrderDialogNegativeClick() {
+        // Creates explanatory snackbar
+        Snackbar.make(findViewById(R.id.next_button),
+            R.string.remove_donut,
+            Snackbar.LENGTH_LONG)
+            .setAction("DISMISS", View.OnClickListener {})
+            .show()
     }
 
     /**

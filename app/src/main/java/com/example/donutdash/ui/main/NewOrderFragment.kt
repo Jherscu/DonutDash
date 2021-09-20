@@ -1,25 +1,20 @@
 package com.example.donutdash.ui.main
 
-import android.content.ContentValues.TAG
 import android.content.Context
-import android.nfc.Tag
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.donutdash.R
 import com.example.donutdash.databinding.FragmentNewOrderBinding
 import com.example.donutdash.model.SharedViewModel
-import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
 /**
@@ -75,18 +70,31 @@ class NewOrderFragment : Fragment() {
             }
             // When date is selected, sets date, initializes time spinner adapter, and makes the time
             // spinner visible
-            dateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            dateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
                     // Launches Snackbar explaining same day pickup fee
                     if (position == 1) {
-                        Snackbar.make(requireView(), "Same day pickup fee: $5.00", Snackbar.LENGTH_LONG)
+                        Snackbar.make(
+                            requireView(),
+                            "Same day pickup fee: $5.00",
+                            Snackbar.LENGTH_LONG
+                        )
                             .setAction("DISMISS", View.OnClickListener {})
                             .show()
                     }
 
                     // Snackbar explaining pickup fee removal when date is changed
                     if (position != 1 && sharedViewModel.datePosition.value == 1) {
-                        Snackbar.make(requireView(), "Same day pickup fee removed", Snackbar.LENGTH_LONG)
+                        Snackbar.make(
+                            requireView(),
+                            "Same day pickup fee removed",
+                            Snackbar.LENGTH_LONG
+                        )
                             .setAction("DISMISS", View.OnClickListener {})
                             .show()
                     }
@@ -95,18 +103,27 @@ class NewOrderFragment : Fragment() {
                     // to reselect "Select Pickup Options", it reinitialize the time, and timeOptions
                     if ((sharedViewModel.date.value != "") && (sharedViewModel.datePosition.value != position) && (position != 0)) {
                         // Resets time using arbitrary number that's not possible to be returned under normal operation of the function
-                        sharedViewModel.setTime("",-2)
+                        sharedViewModel.setTime("", -2)
                         newOrderFragment!!.initTimeSpinnerAdapter()
-                        sharedViewModel.setDate(parent!!.getItemAtPosition(position).toString(), position)
+                        sharedViewModel.setDate(
+                            parent!!.getItemAtPosition(position).toString(),
+                            position
+                        )
                     }
 
                     // Sets date on first pick
                     if (position != 0) {
-                        sharedViewModel.setDate(parent!!.getItemAtPosition(position).toString(), position)
+                        sharedViewModel.setDate(
+                            parent!!.getItemAtPosition(position).toString(),
+                            position
+                        )
                         newOrderFragment!!.initTimeSpinnerAdapter()
                         timeSpinner.visibility = View.VISIBLE
                     } else {
-                        sharedViewModel.setDate(parent!!.getItemAtPosition(sharedViewModel.datePosition.value!!).toString(), sharedViewModel.datePosition.value!!)
+                        sharedViewModel.setDate(
+                            parent!!.getItemAtPosition(sharedViewModel.datePosition.value!!)
+                                .toString(), sharedViewModel.datePosition.value!!
+                        )
                     }
                 }
 
@@ -115,7 +132,11 @@ class NewOrderFragment : Fragment() {
             }
         }
         // Creates spinner adapter of upcoming dates available for pickup
-        createSpinnerAdapter(requireContext(), binding!!.dateSpinner, sharedViewModel.getPickupDates().toTypedArray())
+        createSpinnerAdapter(
+            requireContext(),
+            binding!!.dateSpinner,
+            sharedViewModel.getPickupDates().toTypedArray()
+        )
     }
 
     /**
@@ -124,7 +145,10 @@ class NewOrderFragment : Fragment() {
     private fun respondToKeyEvent(view: View, keyCode: Int): Boolean {
         if (keyCode == KeyEvent.KEYCODE_ENTER) {
             // hide keyboard
-            (activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view.windowToken, 0)
+            (activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                view.windowToken,
+                0
+            )
             // transfer focus to submit button
             binding?.dateSpinner?.requestFocus()
             return true
@@ -158,15 +182,24 @@ class NewOrderFragment : Fragment() {
             binding!!.timeSpinner,
             sharedViewModel.getPickupTimes(sharedViewModel.date.value.toString()).toTypedArray()
         )
-        binding!!.timeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        binding!!.timeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 // Saves position for displaying the time when the fragment goes through lifecycle changes
-                val watchPosition = if ((sharedViewModel.timePosition.value != 0) && (position == 0)) {
-                    sharedViewModel.timePosition.value!!
-                } else {
-                    position
-                }
-                sharedViewModel.setTime(parent!!.getItemAtPosition(position).toString(), watchPosition)
+                val watchPosition =
+                    if ((sharedViewModel.timePosition.value != 0) && (position == 0)) {
+                        sharedViewModel.timePosition.value!!
+                    } else {
+                        position
+                    }
+                sharedViewModel.setTime(
+                    parent!!.getItemAtPosition(position).toString(),
+                    watchPosition
+                )
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -181,7 +214,7 @@ class NewOrderFragment : Fragment() {
         if (sharedViewModel.hasNoNameSet()) {
             // returns focus to name editText and creates explanatory snackbar
             binding?.nameInputEditText?.requestFocus()
-            Snackbar.make(requireView(),"Please enter your name", Snackbar.LENGTH_LONG)
+            Snackbar.make(requireView(), "Please enter your name", Snackbar.LENGTH_LONG)
                 .setAction("DISMISS", View.OnClickListener {})
                 .show()
             return
@@ -190,7 +223,7 @@ class NewOrderFragment : Fragment() {
         if (sharedViewModel.hasNoDateSet()) {
             // returns focus to date spinner and creates explanatory snackbar
             binding?.dateSpinner?.requestFocus()
-            Snackbar.make(requireView(),"Please enter pickup date", Snackbar.LENGTH_LONG)
+            Snackbar.make(requireView(), "Please enter pickup date", Snackbar.LENGTH_LONG)
                 .setAction("DISMISS", View.OnClickListener {})
                 .show()
             return
@@ -199,7 +232,7 @@ class NewOrderFragment : Fragment() {
         if (sharedViewModel.hasNoTimeSet()) {
             // returns focus to date spinner and creates explanatory snackbar
             binding?.timeSpinner?.requestFocus()
-            Snackbar.make(requireView(),"Please enter pickup time", Snackbar.LENGTH_LONG)
+            Snackbar.make(requireView(), "Please enter pickup time", Snackbar.LENGTH_LONG)
                 .setAction("DISMISS", View.OnClickListener {})
                 .show()
             return

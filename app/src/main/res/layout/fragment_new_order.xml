@@ -38,11 +38,11 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name_input_edit_text"
                     android:layout_width="match_parent"
-                    android:hint="@string/order_name"
                     android:layout_height="match_parent"
+                    android:hint="@string/order_name"
                     android:imeOptions="actionDone"
-                    android:text="@{viewModel.name}"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:text="@{viewModel.name}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -52,26 +52,26 @@
             <Spinner
                 android:id="@+id/date_spinner"
                 android:layout_width="160dp"
-                android:contentDescription="@string/dates_for_pickup"
-                android:selectedItemPosition="@{viewModel.datePosition}"
                 android:layout_height="48dp"
                 android:layout_marginBottom="110dp"
+                android:contentDescription="@string/dates_for_pickup"
+                android:selectedItemPosition="@{viewModel.datePosition}"
+                android:spinnerMode="dialog"
                 app:layout_constraintBottom_toTopOf="@id/cancel_order_button"
                 app:layout_constraintEnd_toStartOf="@id/time_spinner"
-                android:spinnerMode="dialog"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <Spinner
                 android:id="@+id/time_spinner"
-                android:visibility="invisible"
                 android:layout_width="160dp"
-                android:contentDescription="@string/times_for_pickup"
-                android:selectedItemPosition="@{viewModel.timePosition}"
                 android:layout_height="48dp"
                 android:layout_marginBottom="110dp"
+                android:contentDescription="@string/times_for_pickup"
+                android:selectedItemPosition="@{viewModel.timePosition}"
+                android:spinnerMode="dialog"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toTopOf="@id/cancel_order_button"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:spinnerMode="dialog"
                 app:layout_constraintStart_toEndOf="@+id/date_spinner" />
 
             <Button

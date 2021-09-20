@@ -1,13 +1,11 @@
 package com.example.donutdash.ui.main
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.example.donutdash.R
 import com.example.donutdash.databinding.FragmentLandingBinding
@@ -62,10 +60,11 @@ class LandingFragment : Fragment() {
     }
 
     fun cancelExistingOrder() {
-        TODO("Removes existing order from recyclerview and sends dialog or" +
-                " snackbar or dropdown that order is canceled with vendor")
+        TODO(
+            "Removes existing order from recyclerview and sends dialog or" +
+                    " snackbar or dropdown that order is canceled with vendor"
+        )
     }
-
 
 
     /**

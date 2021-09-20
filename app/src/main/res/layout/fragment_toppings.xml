@@ -17,11 +17,11 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".ui.main.ToppingsFragment" >
+        tools:context=".ui.main.ToppingsFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/toppings_label"
@@ -47,10 +47,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/subtotal"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/subtotal_display"
                 app:layout_constraintEnd_toStartOf="@id/subtotal_display"
-                app:layout_constraintTop_toTopOf="@id/subtotal_display"
-                app:layout_constraintBottom_toBottomOf="@id/subtotal_display" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/subtotal_display" />
 
             <TextView
                 android:id="@+id/subtotal_display"

@@ -1,12 +1,7 @@
 package com.example.donutdash.model
 
-import android.icu.number.NumberFormatter
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
-import com.google.android.material.snackbar.Snackbar
+import androidx.lifecycle.*
+import kotlinx.coroutines.delay
 import java.io.IOException
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -15,14 +10,15 @@ import java.util.*
 // Donut order base prices
 private const val PRICE_PER_DONUT = 3.29
 
-private const val PRICE_FIRST_TOPPING = 0.25
+// First topping is free
+private const val PRICE_SECOND_TOPPING = 0.25
 
 private const val PRICE_PER_EXTRA_TOPPING = 0.75
 
 // Order modifiers and their flags
 private const val PRICE_SAME_DAY_PICKUP = 5.00
 
-private const val PRICE_LARGE_ORDER = 10.00
+internal const val PRICE_LARGE_ORDER = 15.00
 
 // Tip amounts
 private const val FIFTEEN_PERCENT_TIP = 0.15
@@ -36,7 +32,7 @@ private const val TWENTY_PERCENT_TIP = 0.20
  * such as price, quantity, flavor, toppings, and pickup date.
  * It also maintains the necessary calculations to keep them up to date.
  */
-class SharedViewModel: ViewModel() {
+class SharedViewModel : ViewModel() {
 
     // Name for this order
     private val _name = MutableLiveData<String>()
@@ -104,8 +100,8 @@ class SharedViewModel: ViewModel() {
 
     // Price of the order
     private val _price = MutableLiveData<Double>()
-    val price: LiveData<String> = Transformations.map(_price) {
-        cost -> NumberFormat.getCurrencyInstance(Locale.US).format(cost).toString()
+    val price: LiveData<String> = Transformations.map(_price) { cost ->
+        NumberFormat.getCurrencyInstance(Locale.US).format(cost).toString()
     }
 
     // Reset options for order
@@ -113,11 +109,12 @@ class SharedViewModel: ViewModel() {
         resetOrder()
     }
 
-    // Singleton that flags whether an order modifier has been selected
-    companion object {
-        var sameDayPickupFlag = false
-        var largeOrderFlag = false
-    }
+    // Flags that signal whether an order modifier has been selected or not
+    private var sameDayPickupFlag = false
+    var largeOrderFlag = false
+
+    // Flag that states that toppings fragment has not been reached yet
+    var noToppingsSelectedYet = true
 
     // List of toppings
     val toppings = listOf(
@@ -129,8 +126,8 @@ class SharedViewModel: ViewModel() {
         "Marshmallow Fluff",
         "Jam",
         "Pop Rocks",
-        "NO TOPPING",)
-
+        "NO TOPPING",
+    )
 
     /**
      * Set the name for this order.
@@ -166,12 +163,14 @@ class SharedViewModel: ViewModel() {
             when (optionPosition) {
                 1 -> {
                     if (!sameDayPickupFlag) {
+                        // Switches flag first to avoid recursive loop
                         sameDayPickupFlag = true
                         adjustPrice(newContribution = PRICE_SAME_DAY_PICKUP)
                     }
                 }
                 else -> {
                     if (sameDayPickupFlag) {
+                        // Switches flag first to avoid recursive loop
                         sameDayPickupFlag = false
                         adjustPrice(PRICE_SAME_DAY_PICKUP, 0.0)
                     }
@@ -270,11 +269,13 @@ class SharedViewModel: ViewModel() {
 
         // If this current day is a day on which the business is open, add it as a possible delivery date
         // Then check for each other day of the week after today
-        repeat (7) {
+        repeat(7) {
             if (dayFormatCheck.format(calendarRightNow.time) in _businessHours.keys) {
                 dateOptions.add(dayFormatter.format(calendarRightNow.time))
                 calendarRightNow.add(Calendar.DATE, 1)
-            } else {calendarRightNow.add(Calendar.DATE, 1)}
+            } else {
+                calendarRightNow.add(Calendar.DATE, 1)
+            }
         }
 
         return dateOptions.toList()
@@ -308,7 +309,7 @@ class SharedViewModel: ViewModel() {
 
                 val doubleList = _hoursList.subList(start, (end + 1)).map { dbl -> dbl.toString() }
 
-                val formattedList :List<String> = doubleList.map { dbl ->
+                val formattedList: List<String> = doubleList.map { dbl ->
                     val hour = Regex("""^\d+""").find(dbl)?.value
                     val min = Regex("""\d$""").find(dbl)?.value
                     try {
@@ -321,11 +322,17 @@ class SharedViewModel: ViewModel() {
                         return listOf("Time Format Error")
                     }
                 }
-                val secondListA = formattedList.subList(0, formattedList.indexOf("12:00")).map { time -> "$time A.M." }
+                val secondListA = formattedList.subList(0, formattedList.indexOf("12:00"))
+                    .map { time -> "$time A.M." }
 
-                val secondListB = formattedList.subList(formattedList.indexOf("12:00"), formattedList.size).map { time -> "$time P.M." }
+                val secondListB =
+                    formattedList.subList(formattedList.indexOf("12:00"), formattedList.size)
+                        .map { time -> "$time P.M." }
 
-                val finalList =  mutableListOf("Select Pickup Time").plus(secondListA.plus(secondListB)).toList()
+                val finalList =
+                    mutableListOf("Select Pickup Time")
+                        .plus(secondListA.plus(secondListB))
+                        .toList()
 
                 finalList
             }
@@ -341,53 +348,73 @@ class SharedViewModel: ViewModel() {
     fun setFlavorQuantity(quantity: Int, flavor: String) {
         when (flavor) {
             "Chocolate" -> {
-                adjustPrice(_chocolateQuantity.value!!.toDouble() * PRICE_PER_DONUT,
-                    quantity * PRICE_PER_DONUT)
+                adjustPrice(
+                    _chocolateQuantity.value!!.toDouble() * PRICE_PER_DONUT,
+                    quantity * PRICE_PER_DONUT
+                )
                 _chocolateQuantity.value = quantity
             }
             "Berry" -> {
-                adjustPrice(_berryQuantity.value!!.toDouble() * PRICE_PER_DONUT,
-                    quantity * PRICE_PER_DONUT)
+                adjustPrice(
+                    _berryQuantity.value!!.toDouble() * PRICE_PER_DONUT,
+                    quantity * PRICE_PER_DONUT
+                )
                 _berryQuantity.value = quantity
             }
             "Vanilla" -> {
-                adjustPrice(_vanillaQuantity.value!!.toDouble() * PRICE_PER_DONUT,
-                    quantity * PRICE_PER_DONUT)
+                adjustPrice(
+                    _vanillaQuantity.value!!.toDouble() * PRICE_PER_DONUT,
+                    quantity * PRICE_PER_DONUT
+                )
                 _vanillaQuantity.value = quantity
             }
             "Caramel" -> {
-                adjustPrice(_caramelQuantity.value!!.toDouble() * PRICE_PER_DONUT,
-                    quantity * PRICE_PER_DONUT)
+                adjustPrice(
+                    _caramelQuantity.value!!.toDouble() * PRICE_PER_DONUT,
+                    quantity * PRICE_PER_DONUT
+                )
                 _caramelQuantity.value = quantity
             }
             "Taro" -> {
-                adjustPrice(_taroQuantity.value!!.toDouble() * PRICE_PER_DONUT,
-                    quantity * PRICE_PER_DONUT)
+                adjustPrice(
+                    _taroQuantity.value!!.toDouble() * PRICE_PER_DONUT,
+                    quantity * PRICE_PER_DONUT
+                )
                 _taroQuantity.value = quantity
             }
             "Churro" -> {
-                adjustPrice(_churroQuantity.value!!.toDouble() * PRICE_PER_DONUT,
-                    quantity * PRICE_PER_DONUT)
+                adjustPrice(
+                    _churroQuantity.value!!.toDouble() * PRICE_PER_DONUT,
+                    quantity * PRICE_PER_DONUT
+                )
                 _churroQuantity.value = quantity
             }
             "Lingonberry Jam" -> {
-                adjustPrice(_lingonberryJamQuantity.value!!.toDouble() * PRICE_PER_DONUT,
-                    quantity * PRICE_PER_DONUT)
+                adjustPrice(
+                    _lingonberryJamQuantity.value!!.toDouble() * PRICE_PER_DONUT,
+                    quantity * PRICE_PER_DONUT
+                )
                 _lingonberryJamQuantity.value = quantity
             }
             "Boston Creme" -> {
-                adjustPrice(_bostonCremeQuantity.value!!.toDouble() * PRICE_PER_DONUT,
-                    quantity * PRICE_PER_DONUT)
+                adjustPrice(
+                    _bostonCremeQuantity.value!!.toDouble() * PRICE_PER_DONUT,
+                    quantity * PRICE_PER_DONUT
+                )
                 _bostonCremeQuantity.value = quantity
             }
             "Powdered" -> {
-                adjustPrice(_powderedQuantity.value!!.toDouble() * PRICE_PER_DONUT,
-                    quantity * PRICE_PER_DONUT)
+                adjustPrice(
+                    _powderedQuantity.value!!.toDouble() * PRICE_PER_DONUT,
+                    quantity * PRICE_PER_DONUT
+                )
                 _powderedQuantity.value = quantity
             }
             "Apple Fritter" -> {
-                adjustPrice(_appleFritterQuantity.value!!.toDouble() * PRICE_PER_DONUT,
-                    quantity * PRICE_PER_DONUT)
+                adjustPrice(
+                    _appleFritterQuantity.value!!.toDouble() * PRICE_PER_DONUT,
+                    quantity * PRICE_PER_DONUT
+                )
                 _appleFritterQuantity.value = quantity
             }
         }
@@ -395,13 +422,32 @@ class SharedViewModel: ViewModel() {
 
     /**
      * Sets the price of the order at each stage of the order process.
+     * Also flags large order fee if applicable.
      *
      * @param oldContribution is the old amount of the item adjusting the overall price of the order. Its default value is 0.0 for first time setting of the order.
      *
      * @param newContribution is the new amount of the item adjusting the overall price of the order.
      */
     fun adjustPrice(oldContribution: Double = 0.0, newContribution: Double) {
+        // Main functionality of function
         _price.value = _price.value!! - oldContribution + newContribution
+
+        // If the customer orders 65 donuts or more before selecting toppings, a large order fee is
+        // charged regardless of whether or not the same day pickup fee has already been charged.
+        // 213.85 dollars equates to 65 donuts at 3.29 a piece, without toppings.
+        if ( noToppingsSelectedYet && !largeOrderFlag && ( (!sameDayPickupFlag && _price.value!! >= 213.85) || (sameDayPickupFlag && _price.value!! >= 218.85) ) ) {
+            // Switches flag first to avoid recursive loop
+            largeOrderFlag = true
+            adjustPrice(newContribution = PRICE_LARGE_ORDER)
+        }
+
+        // If the large order fee had been applied and the customer removes donuts to avoid the fee,
+        // removes the fee
+        if ( noToppingsSelectedYet && largeOrderFlag && ( (!sameDayPickupFlag && _price.value!! < 228.85) || (sameDayPickupFlag && _price.value!! < 233.85) )) {
+            // Switches flag first to avoid recursive loop
+            largeOrderFlag = false
+            adjustPrice(PRICE_LARGE_ORDER, 0.0)
+        }
     }
 
     /**
@@ -417,7 +463,7 @@ class SharedViewModel: ViewModel() {
      * @param donuts is the amount for each donut in the order
      */
     fun setOverallQuantity(vararg donuts: Int) {
-        _overallQuantity.value = donuts.reduce {acc: Int, i: Int -> acc + i }
+        _overallQuantity.value = donuts.reduce { acc: Int, i: Int -> acc + i }
     }
 
     /**

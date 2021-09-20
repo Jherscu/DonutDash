@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -17,11 +17,11 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.main.OrderSummaryFragment" >
+        tools:context=".ui.main.OrderSummaryFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/text_summary"
@@ -31,7 +31,7 @@
                 app:layout_constraintBottom_toTopOf="@id/name_summary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/name_summary"
@@ -48,34 +48,34 @@
                 android:id="@+id/pickup_summary"
                 android:layout_width="340dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/name_summary"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@{}"
                 app:layout_constraintBottom_toTopOf="@id/donuts_summary_scroll"
-                tools:text="Friday Jan 4 @ 2:30 p.m."
-                android:text="@{}" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/name_summary"
+                tools:text="Friday Jan 4 @ 2:30 p.m." />
 
             <ScrollView
                 android:id="@+id/donuts_summary_scroll"
                 android:layout_width="340dp"
                 android:layout_height="240dp"
                 android:nestedScrollingEnabled="true"
-                app:layout_constraintTop_toBottomOf="@id/pickup_summary"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/subtotal_display"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pickup_summary"
                 tools:ignore="NestedScrolling">
 
-            <TextView
-                android:id="@+id/donuts_summary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="- 3 chocolate w/ sprinkles, strawberries\n\n
+                <TextView
+                    android:id="@+id/donuts_summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{}"
+                    tools:text="- 3 chocolate w/ sprinkles, strawberries\n\n
     - 4 taro w/ oreo crumble, ice cream\n\n
     - 1 apple fritter w/ ice cream\n\n
     - 6 lingonberry jam w/ caramel drizzle\n\n
-    - 2 berry w/ NO TOPPING"
-                android:text="@{}" />
+    - 2 berry w/ NO TOPPING" />
 
             </ScrollView>
 
@@ -94,13 +94,13 @@
                 android:id="@+id/tip_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="24dp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@id/total_display"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/subtotal_display"
-                app:layout_constraintBottom_toTopOf="@id/total_display">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/subtotal_display">
 
                 <TextView
                     android:id="@+id/text_tip"
@@ -133,16 +133,16 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/custom_tip"
+                    android:layout_width="88dp"
+                    android:layout_height="wrap_content"
                     android:hint="@string/custom"
                     android:paddingTop="6dp"
-                    android:paddingBottom="6dp"
-                    android:layout_width="88dp"
-                    android:layout_height="wrap_content" >
+                    android:paddingBottom="6dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"/>
+                        android:inputType="number" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -163,8 +163,8 @@
                 android:id="@+id/submit_button"
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="17dp"
                 android:layout_marginStart="4dp"
+                android:layout_marginTop="17dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="17dp"
                 android:onClick="@{() -> orderSummaryFragment.submitOrder()}"
