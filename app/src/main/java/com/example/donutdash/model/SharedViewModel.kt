@@ -1,5 +1,6 @@
 package com.example.donutdash.model
 
+import android.os.Build
 import androidx.lifecycle.*
 import kotlinx.coroutines.delay
 import java.io.IOException
@@ -93,6 +94,10 @@ class SharedViewModel : ViewModel() {
     // Quantity of apple fritter donuts in order
     private val _appleFritterQuantity = MutableLiveData<Int>()
     val appleFritterQuantity: LiveData<Int> = _appleFritterQuantity
+
+    // List of all flavors in order and their amounts
+    private val _flavorList = MutableLiveData<MutableMap<String, Int>>()
+    val flavorList: LiveData<MutableMap<String, Int>> = _flavorList
 
     // Overall quantity of the donuts in the order
     private val _overallQuantity = MutableLiveData<Int>()
@@ -346,6 +351,28 @@ class SharedViewModel : ViewModel() {
      * @param flavor is the flavor of the donut to adjust.
      */
     fun setFlavorQuantity(quantity: Int, flavor: String) {
+        // Sets total list of all donuts
+        for (map in _flavorList.value!!) {
+            // Removes placeholder for null
+            if (map == mutableMapOf("" to 0)) {
+                _flavorList.value!!.remove("")
+            }
+            // If another amount has been previously set for the flavor, overrides it
+            if (map.key == flavor) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    _flavorList.value!!.replace(flavor, quantity)
+                } else {
+                    _flavorList.value!!.remove(flavor)
+                    _flavorList.value!![flavor] = quantity
+                }
+            }
+        }
+        // Adds flavor for first time
+        if (flavor !in _flavorList.value!!.keys) {
+            _flavorList.value!![flavor] = quantity
+        }
+
+        // Sets individual donut amount
         when (flavor) {
             "Chocolate" -> {
                 adjustPrice(
@@ -470,6 +497,7 @@ class SharedViewModel : ViewModel() {
      * Resets the order by returning name, date, time, price, and quantity values to blank state.
      */
     fun resetOrder() {
+        _flavorList.value = mutableMapOf("" to 0)
         _name.value = ""
         _date.value = ""
         _time.value = ""

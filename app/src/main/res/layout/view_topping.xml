@@ -17,63 +17,63 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            app:chipText="@{viewModel.toppings[0]}" />
+            android:text="@{viewModel.toppings[0]}"/>
         <!-- add on checked changed to all chips -->
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            app:chipText="@{viewModel.toppings[1]}" />
+            android:text="@{viewModel.toppings[1]}" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            app:chipText="@{viewModel.toppings[2]}" />
+            android:text="@{viewModel.toppings[2]}" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            app:chipText="@{viewModel.toppings[3]}" />
+            android:text="@{viewModel.toppings[3]}" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            app:chipText="@{viewModel.toppings[4]}" />
+            android:text="@{viewModel.toppings[4]}" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            app:chipText="@{viewModel.toppings[5]}" />
+            android:text="@{viewModel.toppings[5]}" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            app:chipText="@{viewModel.toppings[6]}" />
+            android:text="@{viewModel.toppings[6]}" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            app:chipText="@{viewModel.toppings[7]}" />
+            android:text="@{viewModel.toppings[7]}" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            app:chipText="@{viewModel.toppings[8]}" />
+            android:text="@{viewModel.toppings[8]}" />
 
     </com.google.android.material.chip.ChipGroup>
 </layout>
