@@ -2,8 +2,11 @@ package com.example.donutdash.model
 
 import android.os.Build
 import androidx.lifecycle.*
+import com.example.donutdash.R
+import com.google.android.material.chip.ChipGroup
 import kotlinx.coroutines.delay
 import java.io.IOException
+import java.security.AccessController.getContext
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,7 +22,7 @@ private const val PRICE_PER_EXTRA_TOPPING = 0.75
 // Order modifiers and their flags
 private const val PRICE_SAME_DAY_PICKUP = 5.00
 
-internal const val PRICE_LARGE_ORDER = 15.00
+const val PRICE_LARGE_ORDER = 15.00
 
 // Tip amounts
 private const val FIFTEEN_PERCENT_TIP = 0.15
@@ -95,10 +98,6 @@ class SharedViewModel : ViewModel() {
     private val _appleFritterQuantity = MutableLiveData<Int>()
     val appleFritterQuantity: LiveData<Int> = _appleFritterQuantity
 
-    // List of all flavors in order and their amounts
-    private val _flavorList = MutableLiveData<MutableMap<String, Int>>()
-    val flavorList: LiveData<MutableMap<String, Int>> = _flavorList
-
     // Overall quantity of the donuts in the order
     private val _overallQuantity = MutableLiveData<Int>()
     val overallQuantity: LiveData<Int> = _overallQuantity
@@ -108,6 +107,10 @@ class SharedViewModel : ViewModel() {
     val price: LiveData<String> = Transformations.map(_price) { cost ->
         NumberFormat.getCurrencyInstance(Locale.US).format(cost).toString()
     }
+
+    // List of all flavors in order and their amounts
+    private val _flavorMap = MutableLiveData<MutableMap<String, Int>>()
+    val flavorMap: LiveData<MutableMap<String, Int>> = _flavorMap
 
     // Reset options for order
     init {
@@ -132,6 +135,20 @@ class SharedViewModel : ViewModel() {
         "Jam",
         "Pop Rocks",
         "NO TOPPING",
+    )
+
+    // List of flavors
+    private val flavors = listOf(
+        "Chocolate",
+        "Berry",
+        "Vanilla",
+        "Caramel",
+        "Taro",
+        "Churro",
+        "Lingonberry Jam",
+        "Boston creme",
+        "Powdered",
+        "Apple Fritter",
     )
 
     /**
@@ -352,92 +369,92 @@ class SharedViewModel : ViewModel() {
      */
     fun setFlavorQuantity(quantity: Int, flavor: String) {
         // Sets total list of all donuts
-        for (map in _flavorList.value!!) {
+        for (map in _flavorMap.value!!) {
             // Removes placeholder for null
             if (map == mutableMapOf("" to 0)) {
-                _flavorList.value!!.remove("")
+                _flavorMap.value!!.remove("")
             }
             // If another amount has been previously set for the flavor, overrides it
             if (map.key == flavor) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    _flavorList.value!!.replace(flavor, quantity)
+                    _flavorMap.value!!.replace(flavor, quantity)
                 } else {
-                    _flavorList.value!!.remove(flavor)
-                    _flavorList.value!![flavor] = quantity
+                    _flavorMap.value!!.remove(flavor)
+                    _flavorMap.value!![flavor] = quantity
                 }
             }
         }
         // Adds flavor for first time
-        if (flavor !in _flavorList.value!!.keys) {
-            _flavorList.value!![flavor] = quantity
+        if (flavor !in _flavorMap.value!!.keys) {
+            _flavorMap.value!![flavor] = quantity
         }
 
         // Sets individual donut amount
         when (flavor) {
-            "Chocolate" -> {
+             flavors[0] -> {
                 adjustPrice(
                     _chocolateQuantity.value!!.toDouble() * PRICE_PER_DONUT,
                     quantity * PRICE_PER_DONUT
                 )
                 _chocolateQuantity.value = quantity
             }
-            "Berry" -> {
+            flavors[1] -> {
                 adjustPrice(
                     _berryQuantity.value!!.toDouble() * PRICE_PER_DONUT,
                     quantity * PRICE_PER_DONUT
                 )
                 _berryQuantity.value = quantity
             }
-            "Vanilla" -> {
+            flavors[2] -> {
                 adjustPrice(
                     _vanillaQuantity.value!!.toDouble() * PRICE_PER_DONUT,
                     quantity * PRICE_PER_DONUT
                 )
                 _vanillaQuantity.value = quantity
             }
-            "Caramel" -> {
+            flavors[3] -> {
                 adjustPrice(
                     _caramelQuantity.value!!.toDouble() * PRICE_PER_DONUT,
                     quantity * PRICE_PER_DONUT
                 )
                 _caramelQuantity.value = quantity
             }
-            "Taro" -> {
+            flavors[4] -> {
                 adjustPrice(
                     _taroQuantity.value!!.toDouble() * PRICE_PER_DONUT,
                     quantity * PRICE_PER_DONUT
                 )
                 _taroQuantity.value = quantity
             }
-            "Churro" -> {
+            flavors[5] -> {
                 adjustPrice(
                     _churroQuantity.value!!.toDouble() * PRICE_PER_DONUT,
                     quantity * PRICE_PER_DONUT
                 )
                 _churroQuantity.value = quantity
             }
-            "Lingonberry Jam" -> {
+            flavors[6] -> {
                 adjustPrice(
                     _lingonberryJamQuantity.value!!.toDouble() * PRICE_PER_DONUT,
                     quantity * PRICE_PER_DONUT
                 )
                 _lingonberryJamQuantity.value = quantity
             }
-            "Boston Creme" -> {
+            flavors[7] -> {
                 adjustPrice(
                     _bostonCremeQuantity.value!!.toDouble() * PRICE_PER_DONUT,
                     quantity * PRICE_PER_DONUT
                 )
                 _bostonCremeQuantity.value = quantity
             }
-            "Powdered" -> {
+            flavors[8] -> {
                 adjustPrice(
                     _powderedQuantity.value!!.toDouble() * PRICE_PER_DONUT,
                     quantity * PRICE_PER_DONUT
                 )
                 _powderedQuantity.value = quantity
             }
-            "Apple Fritter" -> {
+            flavors[9] -> {
                 adjustPrice(
                     _appleFritterQuantity.value!!.toDouble() * PRICE_PER_DONUT,
                     quantity * PRICE_PER_DONUT
@@ -497,7 +514,7 @@ class SharedViewModel : ViewModel() {
      * Resets the order by returning name, date, time, price, and quantity values to blank state.
      */
     fun resetOrder() {
-        _flavorList.value = mutableMapOf("" to 0)
+        _flavorMap.value = mutableMapOf("" to 0)
         _name.value = ""
         _date.value = ""
         _time.value = ""

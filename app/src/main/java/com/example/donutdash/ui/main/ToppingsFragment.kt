@@ -7,9 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.example.donutdash.R
+import com.example.donutdash.adapter.ToppingsAdapter
+import com.example.donutdash.data.DonutDatasource
 import com.example.donutdash.databinding.FragmentToppingsBinding
 import com.example.donutdash.model.SharedViewModel
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 
 /**
  * [ToppingsFragment] is the third fragment in the donut order lifecycle. In this view
@@ -43,6 +48,12 @@ class ToppingsFragment : Fragment() {
             // associates lifecycle owner of fragment to LiveData object variables, so they can be tracked through the app
             lifecycleOwner = viewLifecycleOwner
         }
+
+        val dataSet = DonutDatasource().loadDonuts(sharedViewModel.flavorMap.value?.toMap() ?: mapOf("" to 0))
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.toppings_recycler_view)
+
+        recyclerView.adapter = ToppingsAdapter(requireContext(), dataSet)
     }
 
     /**

@@ -37,6 +37,7 @@
                 android:id="@+id/toppings_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toTopOf="@id/subtotal_display"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
