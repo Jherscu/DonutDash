@@ -4,15 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.donutdash.R
-import com.example.donutdash.model.SharedViewModel
+import com.example.donutdash.adapter.ToppingsAdapter
 import com.example.donutdash.ui.dialog.LargeOrderDialogFragment
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 
 /**
  * Activity that hosts the donut order flow.
@@ -51,9 +48,11 @@ class MainActivity : AppCompatActivity(), LargeOrderDialogFragment.LargeOrderDia
      */
     override fun onLargeOrderDialogPositiveClick() {
         // Creates explanatory snackbar and navigates to the next fragment
-        Snackbar.make(findViewById(R.id.next_button),
+        Snackbar.make(
+            findViewById(R.id.next_button),
             R.string.fee_applied,
-            Snackbar.LENGTH_LONG)
+            Snackbar.LENGTH_LONG
+        )
             .setAction("DISMISS", View.OnClickListener {})
             .show()
         navController.navigate(R.id.action_flavorFragment_to_toppingsFragment)
@@ -66,9 +65,11 @@ class MainActivity : AppCompatActivity(), LargeOrderDialogFragment.LargeOrderDia
      */
     override fun onLargeOrderDialogNegativeClick() {
         // Creates explanatory snackbar
-        Snackbar.make(findViewById(R.id.next_button),
+        Snackbar.make(
+            findViewById(R.id.next_button),
             R.string.remove_donut,
-            Snackbar.LENGTH_LONG)
+            Snackbar.LENGTH_LONG
+        )
             .setAction("DISMISS", View.OnClickListener {})
             .show()
     }

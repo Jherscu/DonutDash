@@ -2,8 +2,6 @@ package com.example.donutdash.data
 
 import com.example.donutdash.R
 import com.example.donutdash.model.Donut
-import com.example.donutdash.ui.main.ToppingsFragment
-import com.google.android.material.chip.ChipGroup
 
 class DonutDatasource {
 
@@ -23,7 +21,7 @@ class DonutDatasource {
         }
     }
 
-    fun loadDonuts(flavorMap: Map<String, Int>) : List<Donut> {
+    fun loadDonuts(flavorMap: Map<String, Int>): List<Donut> {
         val donutList = mutableListOf<Donut>()
         for (entry in flavorMap) {
             repeat(entry.value) {

@@ -1,15 +1,27 @@
 package com.example.donutdash.model
 
 import android.os.Build
-import androidx.lifecycle.*
-import com.example.donutdash.R
-import com.google.android.material.chip.ChipGroup
-import kotlinx.coroutines.delay
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import java.io.IOException
-import java.security.AccessController.getContext
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.List
+import kotlin.collections.MutableMap
+import kotlin.collections.getValue
+import kotlin.collections.iterator
+import kotlin.collections.listOf
+import kotlin.collections.map
+import kotlin.collections.mapOf
+import kotlin.collections.mutableListOf
+import kotlin.collections.mutableMapOf
+import kotlin.collections.plus
+import kotlin.collections.reduce
+import kotlin.collections.set
+import kotlin.collections.toList
 
 // Donut order base prices
 private const val PRICE_PER_DONUT = 3.29
@@ -123,19 +135,6 @@ class SharedViewModel : ViewModel() {
 
     // Flag that states that toppings fragment has not been reached yet
     var noToppingsSelectedYet = true
-
-    // List of toppings
-    val toppings = listOf(
-        "Sprinkles",
-        "Strawberries",
-        "Oreo Crumble",
-        "Ice Cream",
-        "Caramel Drizzle",
-        "Marshmallow Fluff",
-        "Jam",
-        "Pop Rocks",
-        "NO TOPPING",
-    )
 
     // List of flavors
     private val flavors = listOf(
@@ -370,10 +369,6 @@ class SharedViewModel : ViewModel() {
     fun setFlavorQuantity(quantity: Int, flavor: String) {
         // Sets total list of all donuts
         for (map in _flavorMap.value!!) {
-            // Removes placeholder for null
-            if (map == mutableMapOf("" to 0)) {
-                _flavorMap.value!!.remove("")
-            }
             // If another amount has been previously set for the flavor, overrides it
             if (map.key == flavor) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -391,7 +386,7 @@ class SharedViewModel : ViewModel() {
 
         // Sets individual donut amount
         when (flavor) {
-             flavors[0] -> {
+            flavors[0] -> {
                 adjustPrice(
                     _chocolateQuantity.value!!.toDouble() * PRICE_PER_DONUT,
                     quantity * PRICE_PER_DONUT
@@ -479,7 +474,7 @@ class SharedViewModel : ViewModel() {
         // If the customer orders 65 donuts or more before selecting toppings, a large order fee is
         // charged regardless of whether or not the same day pickup fee has already been charged.
         // 213.85 dollars equates to 65 donuts at 3.29 a piece, without toppings.
-        if ( noToppingsSelectedYet && !largeOrderFlag && ( (!sameDayPickupFlag && _price.value!! >= 213.85) || (sameDayPickupFlag && _price.value!! >= 218.85) ) ) {
+        if (noToppingsSelectedYet && !largeOrderFlag && ((!sameDayPickupFlag && _price.value!! >= 213.85) || (sameDayPickupFlag && _price.value!! >= 218.85))) {
             // Switches flag first to avoid recursive loop
             largeOrderFlag = true
             adjustPrice(newContribution = PRICE_LARGE_ORDER)
@@ -487,7 +482,7 @@ class SharedViewModel : ViewModel() {
 
         // If the large order fee had been applied and the customer removes donuts to avoid the fee,
         // removes the fee
-        if ( noToppingsSelectedYet && largeOrderFlag && ( (!sameDayPickupFlag && _price.value!! < 228.85) || (sameDayPickupFlag && _price.value!! < 233.85) )) {
+        if (noToppingsSelectedYet && largeOrderFlag && ((!sameDayPickupFlag && _price.value!! < 228.85) || (sameDayPickupFlag && _price.value!! < 233.85))) {
             // Switches flag first to avoid recursive loop
             largeOrderFlag = false
             adjustPrice(PRICE_LARGE_ORDER, 0.0)
@@ -514,7 +509,7 @@ class SharedViewModel : ViewModel() {
      * Resets the order by returning name, date, time, price, and quantity values to blank state.
      */
     fun resetOrder() {
-        _flavorMap.value = mutableMapOf("" to 0)
+        _flavorMap.value = mutableMapOf()
         _name.value = ""
         _date.value = ""
         _time.value = ""

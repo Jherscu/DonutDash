@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="chip_0" type="id" />
+    <item name="chip_1" type="id" />
+    <item name="chip_2" type="id" />
+    <item name="chip_3" type="id" />
+    <item name="chip_4" type="id" />
+    <item name="chip_5" type="id" />
+    <item name="chip_6" type="id" />
+    <item name="chip_7" type="id" />
+    <item name="chip_8" type="id" />
+</resources>
