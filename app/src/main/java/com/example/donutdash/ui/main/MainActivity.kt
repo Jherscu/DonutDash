@@ -7,7 +7,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.donutdash.R
-import com.example.donutdash.adapter.ToppingsAdapter
 import com.example.donutdash.ui.dialog.LargeOrderDialogFragment
 import com.google.android.material.snackbar.Snackbar
 

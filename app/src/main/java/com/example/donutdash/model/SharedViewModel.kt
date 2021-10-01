@@ -9,19 +9,7 @@ import java.io.IOException
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.List
-import kotlin.collections.MutableMap
-import kotlin.collections.getValue
-import kotlin.collections.iterator
-import kotlin.collections.listOf
-import kotlin.collections.map
-import kotlin.collections.mapOf
-import kotlin.collections.mutableListOf
-import kotlin.collections.mutableMapOf
-import kotlin.collections.plus
-import kotlin.collections.reduce
 import kotlin.collections.set
-import kotlin.collections.toList
 
 // Donut order base prices
 private const val PRICE_PER_DONUT = 3.29
@@ -120,9 +108,13 @@ class SharedViewModel : ViewModel() {
         NumberFormat.getCurrencyInstance(Locale.US).format(cost).toString()
     }
 
-    // List of all flavors in order and their amounts
+    // List of all flavors in the order and their amounts
     private val _flavorMap = MutableLiveData<MutableMap<String, Int>>()
     val flavorMap: LiveData<MutableMap<String, Int>> = _flavorMap
+
+    // List all complete donuts in the order with their flavor and toppings
+    private val _donutList = MutableLiveData<MutableList<Donut>>()
+    val donutList: LiveData<MutableList<Donut>> = _donutList
 
     // Reset options for order
     init {
@@ -487,6 +479,10 @@ class SharedViewModel : ViewModel() {
             largeOrderFlag = false
             adjustPrice(PRICE_LARGE_ORDER, 0.0)
         }
+    }
+
+    fun addToDonutList(flavor: String, toppings: List<String>) {
+
     }
 
     /**

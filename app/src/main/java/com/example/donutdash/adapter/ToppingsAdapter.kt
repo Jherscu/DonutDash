@@ -5,18 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.view.children
-import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import com.example.donutdash.R
 import com.example.donutdash.model.Donut
+import com.example.donutdash.model.SharedViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 
+
 class ToppingsAdapter(
     val context: Context,
-    private val dataset: List<Donut>
+    private val dataset: List<Donut>,
+    val viewModel: SharedViewModel
 ) : RecyclerView.Adapter<ToppingsAdapter.ToppingsViewHolder>() {
 
     class ToppingsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -26,6 +26,7 @@ class ToppingsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToppingsViewHolder {
         // Create a new view
+
         val adapterLayout = LayoutInflater.from(parent.context)
             .inflate(R.layout.donut_item, parent, false)
 
@@ -33,9 +34,15 @@ class ToppingsAdapter(
     }
 
     override fun onBindViewHolder(holder: ToppingsViewHolder, position: Int) {
+
+        val toppingList = mutableListOf<String>()
+
         // Set donut string
         val item = dataset[position]
         holder.donutString.text = context.resources.getString(item.stringResourceId)
+
+        // Requires at least one selection in chipGroup to be picked
+        holder.chipGroup.isSelectionRequired = true
 
         // Set toppings chipgroup
         val toppings = mapOf(
@@ -50,18 +57,36 @@ class ToppingsAdapter(
             R.id.chip_8 to "NO TOPPING",
         )
 
+        // Inflates a choice style chip from its layout for each topping,
+        // and assigns its text
         for (topping in toppings) {
+
             val chip: Chip = LayoutInflater.from(context)
                 .inflate(R.layout.choice_chip, holder.chipGroup, false) as Chip
+
             chip.text = topping.value
+
             chip.id = topping.key
-            chip.setOnCheckedChangeListener {thisChip, isChecked ->
-                if (isChecked) {
-                    Toast.makeText(context, isChecked.toString(),Toast.LENGTH_SHORT).show()
+
+            // If the chip is already selected on click, the topping is removed.
+            // If the chip is not selected on click, the topping is added.
+            chip.setOnClickListener {
+                if (it.isSelected) {
+                    toppingList.remove(chip.text.toString())
+                } else {
+                    toppingList.add(chip.text.toString())
                 }
             }
+
+            if (topping.key == R.id.chip_8) {
+                chip.isSelected = true
+            }
+
             holder.chipGroup.addView(chip)
+
+            // viewModel.addToDonutList(chip.text.toString(), toppingList)
         }
+
     }
 
     override fun getItemCount(): Int = dataset.size

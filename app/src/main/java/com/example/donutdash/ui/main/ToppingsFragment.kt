@@ -48,11 +48,11 @@ class ToppingsFragment : Fragment() {
         }
 
         val dataSet = DonutDatasource()
-            .loadDonuts(sharedViewModel.flavorMap.value?.toMap() ?: mapOf("" to 0))
+            .loadDonutFlavors(sharedViewModel.flavorMap.value?.toMap() ?: mapOf("" to 0))
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.toppings_recycler_view)
 
-        recyclerView.adapter = ToppingsAdapter(requireContext(), dataSet)
+        recyclerView.adapter = ToppingsAdapter(requireContext(), dataSet, sharedViewModel)
     }
 
     /**
